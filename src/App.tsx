@@ -9,7 +9,7 @@ import LogInPage from './pages/LogInPage';
 
 export default function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={process.env.PUBLIC_URL}>
       <Header />
       <Routes>
         <Route path='/etermarket/' element={<Home />} />
