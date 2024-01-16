@@ -7,7 +7,7 @@ export default function Header() {
         <div className='font-roboto text-2xl font-bold'>
           <Link to='/etermarket/'>ETERMARKET</Link>
         </div>
-        <div className='text-lg space-x-20'>
+        <div className='text-lg font-semibold space-x-20'>
           <Link to='/etermarket/itemSearch'>매물 검색</Link>
           <Link to='/etermarket/tradeHistory'>시세 조회</Link>
         </div>
