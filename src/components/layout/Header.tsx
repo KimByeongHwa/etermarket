@@ -5,14 +5,14 @@ export default function Header() {
     <div className='container py-6'>
       <div className='container w-11/12 flex items-center justify-between'>
         <div className='font-roboto text-2xl font-bold'>
-          <Link to='/'>ETERMARKET</Link>
+          <Link to='/etermarket/'>ETERMARKET</Link>
         </div>
         <div className='text-lg space-x-20'>
-          <Link to='/itemSearch'>매물 검색</Link>
-          <Link to='/tradeHistory'>시세 조회</Link>
+          <Link to='/etermarket/itemSearch'>매물 검색</Link>
+          <Link to='/etermarket/tradeHistory'>시세 조회</Link>
         </div>
         <div className='text-base text-muted-foreground '>
-          <Link to='/signUp'>회원가입</Link> / <Link to='/logIn'>로그인</Link>
+          <Link to='/etermarket/signUp'>회원가입</Link> / <Link to='/etermarket/logIn'>로그인</Link>
         </div>
       </div>
     </div>

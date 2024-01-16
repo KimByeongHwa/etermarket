@@ -12,11 +12,11 @@ export default function App() {
     <BrowserRouter>
       <Header />
       <Routes>
-        <Route path='/' element={<Home />} />
-        <Route path='/itemSearch' element={<ItemSearchPage />} />
-        <Route path='/tradeHistory' element={<TradeHistoryPage />} />
-        <Route path='/signUp' element={<SingUpPage />} />
-        <Route path='/logIn' element={<LogInPage />} />
+        <Route path='/etermarket/' element={<Home />} />
+        <Route path='/etermarket/itemSearch' element={<ItemSearchPage />} />
+        <Route path='/etermarket/tradeHistory' element={<TradeHistoryPage />} />
+        <Route path='/etermarket/signUp' element={<SingUpPage />} />
+        <Route path='/etermarket/logIn' element={<LogInPage />} />
       </Routes>
     </BrowserRouter>
   );
