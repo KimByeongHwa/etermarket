@@ -4,10 +4,15 @@ module.exports = {
   content: ['./pages/**/*.{ts,tsx}', './components/**/*.{ts,tsx}', './app/**/*.{ts,tsx}', './src/**/*.{ts,tsx}'],
   prefix: '',
   theme: {
+    fontFamily: {
+      notoSansKR: ['Noto Sans KR', 'sans-serif'],
+      roboto: ['Roboto', 'sans-serif'],
+    },
     container: {
       center: true,
     },
     extend: {
+      fontFamily: { sans: ['Noto Sans KR', 'Roboto', 'sans-serif'] },
       colors: {
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
