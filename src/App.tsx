@@ -14,11 +14,11 @@ const router = createBrowserRouter([
     children: [
       { path: '', element: <Home /> },
       {
-        path: 'itemsearch',
+        path: 'items',
         element: <ItemSearchPage />,
       },
       {
-        path: 'tradehistory',
+        path: 'trade-history',
         element: <TradeHistoryPage />,
       },
       {
