@@ -1,23 +1,38 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Header from './components/layout/Header';
-import Home from './pages/Home';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import '@/global.css';
+import Layout from './Layout';
+import Home from './pages/Home';
 import ItemSearchPage from './pages/ItemSearchPage';
 import TradeHistoryPage from './pages/TradeHistoryPage';
 import SingUpPage from './pages/SignUpPage';
-import LogInPage from './pages/LogInPage';
+import SignInPage from './pages/SignInPage';
+
+const router = createBrowserRouter([
+  {
+    path: '/etermarket/',
+    element: <Layout />,
+    children: [
+      { path: '', element: <Home /> },
+      {
+        path: 'itemsearch',
+        element: <ItemSearchPage />,
+      },
+      {
+        path: 'tradehistory',
+        element: <TradeHistoryPage />,
+      },
+      {
+        path: 'signup',
+        element: <SingUpPage />,
+      },
+      {
+        path: 'signin',
+        element: <SignInPage />,
+      },
+    ],
+  },
+]);
 
 export default function App() {
-  return (
-    <BrowserRouter basename={import.meta.env.PUBLIC_URL}>
-      <Header />
-      <Routes>
-        <Route path='/etermarket/' element={<Home />} />
-        <Route path='/etermarket/itemSearch' element={<ItemSearchPage />} />
-        <Route path='/etermarket/tradeHistory' element={<TradeHistoryPage />} />
-        <Route path='/etermarket/signUp' element={<SingUpPage />} />
-        <Route path='/etermarket/logIn' element={<LogInPage />} />
-      </Routes>
-    </BrowserRouter>
-  );
+  return <RouterProvider router={router} />;
 }

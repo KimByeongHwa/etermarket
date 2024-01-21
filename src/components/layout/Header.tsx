@@ -8,11 +8,11 @@ export default function Header() {
           <Link to='/etermarket/'>ETERMARKET</Link>
         </div>
         <div className='text-lg font-semibold space-x-20'>
-          <Link to='/etermarket/itemSearch'>매물 검색</Link>
-          <Link to='/etermarket/tradeHistory'>시세 조회</Link>
+          <Link to='/etermarket/itemsearch'>매물 검색</Link>
+          <Link to='/etermarket/tradehistory'>시세 조회</Link>
         </div>
         <div className='text-base text-muted-foreground '>
-          <Link to='/etermarket/signUp'>회원가입</Link> / <Link to='/etermarket/logIn'>로그인</Link>
+          <Link to='/etermarket/signup'>회원가입</Link> / <Link to='/etermarket/signin'>로그인</Link>
         </div>
       </div>
     </div>
