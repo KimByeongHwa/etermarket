@@ -2,7 +2,8 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import '@/global.css';
 import Layout from './Layout';
 import Home from './pages/Home';
-import ItemSearchPage from './pages/ItemSearchPage';
+import SearchItemPage from './pages/SearchItemPage';
+import SellItemPage from './pages/SellItemPage';
 import TradeHistoryPage from './pages/TradeHistoryPage';
 import SingUpPage from './pages/SignUpPage';
 import SignInPage from './pages/SignInPage';
@@ -14,8 +15,12 @@ const router = createBrowserRouter([
     children: [
       { path: '', element: <Home /> },
       {
-        path: 'items',
-        element: <ItemSearchPage />,
+        path: 'search-item',
+        element: <SearchItemPage />,
+      },
+      {
+        path: 'sell-item',
+        element: <SellItemPage />,
       },
       {
         path: 'trade-history',

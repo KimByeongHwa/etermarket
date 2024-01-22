@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Dialog, Popover } from '@headlessui/react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
+import SignInModal from '../auth/SignInModal';
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -26,12 +27,12 @@ export default function Header() {
           </button>
         </div>
         <Popover.Group className='hidden lg:flex lg:gap-x-12 text-sm font-semibold leading-6 text-gray-900'>
-          <Link to='/etermarket/items'>매물 검색</Link>
+          <Link to='/etermarket/search-item'>매물 검색</Link>
+          <Link to='/etermarket/sell-item'>매물 등록</Link>
           <Link to='/etermarket/trade-history'>시세 조회</Link>
         </Popover.Group>
         <div className='hidden lg:flex lg:flex-1 lg:justify-end lg:gap-x-6 text-sm font-semibold leading-6 text-gray-900'>
-          <Link to='/etermarket/signup'>회원가입</Link>
-          <Link to='/etermarket/signin'>로그인</Link>
+          <SignInModal />
         </div>
       </nav>
       <Dialog as='div' className='lg:hidden' open={mobileMenuOpen} onClose={setMobileMenuOpen}>
@@ -54,20 +55,18 @@ export default function Header() {
           <div className='mt-6 flow-root'>
             <div className='-my-6 divide-y divide-gray-500/10'>
               <div className='space-y-2 py-6 text-base font-semibold leading-7 text-gray-900'>
-                <Link to='/etermarket/items' className='-mx-3 block rounded-lg px-3 py-2   hover:bg-gray-50'>
+                <Link to='/etermarket/search-item' className='-mx-3 block rounded-lg px-3 py-2   hover:bg-gray-50'>
                   매물 검색
+                </Link>
+                <Link to='/etermarket/sell-item' className='-mx-3 block rounded-lg px-3 py-2   hover:bg-gray-50'>
+                  매물 등록
                 </Link>
                 <Link to='/etermarket/trade-history' className='-mx-3 block rounded-lg px-3 py-2  hover:bg-gray-50'>
                   시세 조회
                 </Link>
               </div>
               <div className='py-6 text-base font-semibold leading-7 text-gray-900'>
-                <Link to='/etermarket/signup' className='-mx-3 block rounded-lg px-3 py-2.5  hover:bg-gray-50'>
-                  회원가입
-                </Link>
-                <Link to='/etermarket/signin' className='-mx-3 block rounded-lg px-3 py-2.5  hover:bg-gray-50'>
-                  로그인
-                </Link>
+                <SignInModal />
               </div>
             </div>
           </div>
