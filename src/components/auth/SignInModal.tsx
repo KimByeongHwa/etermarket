@@ -18,13 +18,14 @@ export default function SignInModal() {
     const session = authInfo.data.session;
 
     if (session) setIsLogin(true);
+    console.log(session);
   }
 
   async function signInWithKakao() {
     await supabase.auth.signInWithOAuth({
       provider: 'kakao',
       options: {
-        redirectTo: 'http://localhost:5173/etermarket/',
+        redirectTo: 'http://localhost:5173/etermarket/signup/',
       },
     });
   }
