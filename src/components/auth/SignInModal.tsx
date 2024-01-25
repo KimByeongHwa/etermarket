@@ -9,6 +9,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Button } from '../ui/button';
+import useSignUp from '@/hooks/useSignUp';
 
 export default function SignInModal() {
   const [isLogin, setIsLogin] = useState(false);
@@ -19,15 +20,6 @@ export default function SignInModal() {
 
     if (session) setIsLogin(true);
     console.log(session);
-  }
-
-  async function signInWithKakao() {
-    await supabase.auth.signInWithOAuth({
-      provider: 'kakao',
-      options: {
-        redirectTo: 'http://localhost:5173/etermarket/signup/',
-      },
-    });
   }
 
   async function signOut() {
@@ -54,7 +46,7 @@ export default function SignInModal() {
               <DialogDescription>카카오 계정을 통해 간편하게 시작해보세요!</DialogDescription>
             </DialogHeader>
             <div>
-              <Button type='submit' onClick={() => signInWithKakao()}>
+              <Button type='submit' onClick={useSignUp}>
                 카카오 계정 로그인
               </Button>
             </div>
