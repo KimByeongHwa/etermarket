@@ -34,12 +34,31 @@ export default function SingUpPage() {
                 id='userId'
                 className='block w-full rounded-md border-0 px-3 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
                 {...register('userId', {
-                  required: '사용하실 아이디를 입력해 주세요.',
+                  required: '아이디를 입력해 주세요.',
                   minLength: { value: 4, message: '아이디는 4자 이상이어야 합니다.' },
                   maxLength: { value: 18, message: '아이디는 18자 이하이어야 합니다.' },
                 })}
               />
               {errors.userId && <div className='my-2 text-red-500'>{errors.userId.message?.toString()}</div>}
+            </div>
+          </div>
+
+          <div>
+            <label htmlFor='nickname' className='block text-sm font-medium leading-6 text-gray-900'>
+              닉네임
+            </label>
+            <div className='mt-2'>
+              <input
+                type='text'
+                id='nickname'
+                className='block w-full rounded-md border-0 px-3 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
+                {...register('nickname', {
+                  required: '닉네임을 입력해 주세요.',
+                  minLength: { value: 2, message: '닉네임은 2자 이상이어야 합니다.' },
+                  maxLength: { value: 18, message: '닉네임은 18자 이하이어야 합니다.' },
+                })}
+              />
+              {errors.nickname && <div className='my-2 text-red-500'>{errors.nickname.message?.toString()}</div>}
             </div>
           </div>
 
@@ -55,7 +74,7 @@ export default function SingUpPage() {
                 id='userPw'
                 className='block w-full rounded-md border-0 px-3 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
                 {...register('userPw', {
-                  required: true,
+                  required: '비밀번호를 입력해 주세요.',
                   minLength: { value: 6, message: '비밀번호는 6자 이상이어야 합니다.' },
                 })}
               />
@@ -75,32 +94,13 @@ export default function SingUpPage() {
                 id='userPwConfirm'
                 className='block w-full rounded-md border-0 px-3 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
                 {...register('userPwConfirm', {
-                  required: true,
+                  required: '비밀번호가 일치하지 않습니다.',
                   validate: value => value === userPwInput || '비밀번호가 일치하지 않습니다.',
                 })}
               />
               {errors.userPwConfirm && (
                 <div className='my-2 text-red-500'>{errors.userPwConfirm.message?.toString()}</div>
               )}
-            </div>
-          </div>
-
-          <div>
-            <label htmlFor='nickname' className='block text-sm font-medium leading-6 text-gray-900'>
-              닉네임
-            </label>
-            <div className='mt-2'>
-              <input
-                type='text'
-                id='nickname'
-                className='block w-full rounded-md border-0 px-3 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
-                {...register('nickname', {
-                  required: true,
-                  minLength: { value: 2, message: '닉네임은 2자 이상이어야 합니다.' },
-                  maxLength: { value: 18, message: '닉네임은 18자 이하이어야 합니다.' },
-                })}
-              />
-              {errors.nickname && <div className='my-2 text-red-500'>{errors.nickname.message?.toString()}</div>}
             </div>
           </div>
 
