@@ -47,7 +47,7 @@ export default function SignInModal() {
               <DialogTitle className='text-center mt-2 text-xl'>로그인</DialogTitle>
             </DialogHeader>
 
-            <div className='w-3/5 mx-auto'>
+            <form className='w-3/5 mx-auto'>
               <label htmlFor='userId' className='block text-start font-medium leading-6 text-gray-900'>
                 아이디
               </label>
@@ -57,11 +57,12 @@ export default function SignInModal() {
                 className='block w-full rounded-md border-0 mt-2 px-3 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
               />
 
-              <label htmlFor='userPw' className='mt-4 block text-start text-sm font-medium leading-6 text-gray-900'>
+              <label htmlFor='userPw' className='mt-4 block text-start font-medium leading-6 text-gray-900'>
                 비밀번호
               </label>
               <input
                 type='password'
+                autoComplete='off'
                 id='userPw'
                 className='block w-full rounded-md border-0 mt-2 px-3 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
               />
@@ -69,10 +70,10 @@ export default function SignInModal() {
               <Button type='submit' className='w-full mt-8 rounded-md'>
                 로그인하기
               </Button>
-            </div>
+            </form>
 
             <div className='w-3/5 mt-4 mx-auto'>
-              <DialogDescription>아직 아이디가 없으신가요?</DialogDescription>
+              <DialogDescription>아직 회원이 아니신가요?</DialogDescription>
               <Button
                 type='submit'
                 onClick={useSignInWithKaKao}
