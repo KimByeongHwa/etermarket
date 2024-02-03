@@ -1,5 +1,5 @@
 import { useForm } from 'react-hook-form';
-import { FormData } from '@/../types';
+import { SignUpFormData } from '@/../types';
 
 export default function SingUpPage() {
   const {
@@ -7,11 +7,11 @@ export default function SingUpPage() {
     watch,
     formState: { errors },
     handleSubmit,
-  } = useForm<FormData>({ mode: 'onBlur' });
+  } = useForm<SignUpFormData>({ mode: 'onBlur' });
 
   const userPwInput = watch('userPw');
 
-  const SignUpFunc = (data: FormData) => {
+  const SignUpFunc = (data: SignUpFormData) => {
     // TODO: 회원가입 함수 구현(with supabase)
     console.log(data);
   };

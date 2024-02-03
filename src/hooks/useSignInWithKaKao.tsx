@@ -1,11 +1,15 @@
 import supabase from '@/lib/supabase';
 
-export default function useSignUp() {
+export default function useSignInWithKaKao() {
   async function signInWithKakao() {
     const result = await supabase.auth.signInWithOAuth({
       provider: 'kakao',
       options: {
         redirectTo: 'http://localhost:5173/etermarket/signup/',
+        queryParams: {
+          prompt: 'login',
+          scope: 'profile_nickname account_email',
+        },
       },
     });
     return result;

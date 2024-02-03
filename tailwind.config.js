@@ -14,6 +14,8 @@ module.exports = {
     extend: {
       fontFamily: { sans: ['Noto Sans KR', 'Roboto', 'sans-serif'] },
       colors: {
+        kakaoYellow: '#FEE500',
+        kakaoBlack: '#191919',
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
