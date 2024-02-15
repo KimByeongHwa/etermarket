@@ -1,8 +1,8 @@
 import supabase from '@/lib/supabase';
 
-export default function signInWithKaKao() {
-  async function signInWithKakao() {
-    const result = await supabase.auth.signInWithOAuth({
+export default async function signInWithKaKao() {
+  try {
+    await supabase.auth.signInWithOAuth({
       provider: 'kakao',
       options: {
         redirectTo: 'http://localhost:5173/etermarket/signup/',
@@ -12,9 +12,7 @@ export default function signInWithKaKao() {
         },
       },
     });
-    return result;
+  } catch {
+    throw new Error();
   }
-
-  // console.log(signInWithKakao);
-  signInWithKakao().then(result => console.log(result));
 }

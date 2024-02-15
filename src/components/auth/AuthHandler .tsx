@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, FormEvent } from 'react';
 import supabase from '@/lib/supabase';
 import signInWithKaKao from '@/api/signInWithKaKao';
 import {
@@ -12,7 +12,7 @@ import {
 import { Button } from '../ui/button';
 import KaKaoSymbol from '@/assets/svg/KaKaoSymbol';
 
-export default function SignInModal() {
+export default function AuthHandler() {
   const [isLogin, setIsLogin] = useState(false);
 
   async function checkLogin() {
@@ -20,14 +20,23 @@ export default function SignInModal() {
     const authInfo = await supabase.auth.getSession();
     const session = authInfo.data.session;
 
-    if (session) setIsLogin(true);
+    // if (session) setIsLogin(true);
     console.log(session);
   }
 
-  async function signOut() {
+  const handleKakaoLogin = async () => {
+    await signInWithKaKao().then(res => console.log(res));
+  };
+
+  const handleLogIn = (e: FormEvent) => {
+    e.preventDefault();
+    console.log('로그인하기');
+  };
+
+  const handleLogOut = async () => {
     await supabase.auth.signOut();
     setIsLogin(false);
-  }
+  };
 
   useEffect(() => {
     checkLogin();
@@ -36,7 +45,7 @@ export default function SignInModal() {
   return (
     <>
       {isLogin ? (
-        <button type='submit' onClick={() => signOut()}>
+        <button type='button' onClick={handleLogOut}>
           로그아웃
         </button>
       ) : (
@@ -67,7 +76,7 @@ export default function SignInModal() {
                 className='block w-full rounded-md border-0 mt-2 px-3 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
               />
 
-              <Button type='submit' className='w-full mt-8 rounded-md'>
+              <Button type='submit' onClick={handleLogIn} className='w-full mt-8 rounded-md'>
                 로그인하기
               </Button>
             </form>
@@ -75,9 +84,9 @@ export default function SignInModal() {
             <div className='w-3/5 mt-4 mx-auto'>
               <DialogDescription>아직 회원이 아니신가요?</DialogDescription>
               <Button
-                type='submit'
-                onClick={signInWithKaKao}
-                className='w-full my-3 rounded-xl bg-kakaoYellow hover:bg-kakaoYellow text-kakaoBlack'
+                type='button'
+                onClick={handleKakaoLogin}
+                className='w-full mt-3 mb-4 rounded-xl bg-kakaoYellow hover:bg-kakaoYellow text-kakaoBlack'
               >
                 <div className='mr-2'>
                   <KaKaoSymbol />

@@ -11,7 +11,7 @@ export default function SingUpPage() {
 
   const userPwInput = watch('userPw');
 
-  const SignUpFunc = (data: SignUpFormData) => {
+  const handleSignUp = (data: SignUpFormData) => {
     // TODO: 회원가입 함수 구현(with supabase)
     console.log(data);
   };
@@ -23,7 +23,7 @@ export default function SingUpPage() {
       </div>
 
       <div className='mt-10 sm:mx-auto sm:w-full sm:max-w-sm'>
-        <form className='space-y-6' onSubmit={handleSubmit(SignUpFunc)}>
+        <form className='space-y-6' onSubmit={handleSubmit(handleSignUp)}>
           <div>
             <label htmlFor='userId' className='block text-sm font-medium leading-6 text-gray-900'>
               아이디

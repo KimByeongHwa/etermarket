@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Dialog, Popover } from '@headlessui/react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
-import SignInModal from '../auth/SignInModal';
+import AuthHandler from '../auth/AuthHandler ';
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -32,7 +32,7 @@ export default function Header() {
           <Link to='/etermarket/trade-history'>시세 조회</Link>
         </Popover.Group>
         <div className='hidden lg:flex lg:flex-1 lg:justify-end lg:gap-x-6 font-semibold leading-6 text-gray-900'>
-          <SignInModal />
+          <AuthHandler />
         </div>
       </nav>
       <Dialog as='div' className='lg:hidden' open={mobileMenuOpen} onClose={setMobileMenuOpen}>
@@ -66,7 +66,7 @@ export default function Header() {
                 </Link>
               </div>
               <div className='py-6 text-base font-semibold leading-7 text-gray-900'>
-                <SignInModal />
+                <AuthHandler />
               </div>
             </div>
           </div>

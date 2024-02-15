@@ -5,7 +5,7 @@ export interface SignUpFormData {
   nickname: string;
 }
 
-export interface LoginFormData {
+export interface LogInFormData {
   userId: string;
   userPw: string;
 }

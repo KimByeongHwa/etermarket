@@ -6,7 +6,7 @@ import SearchItemPage from './pages/SearchItemPage';
 import SellItemPage from './pages/SellItemPage';
 import TradeHistoryPage from './pages/TradeHistoryPage';
 import SingUpPage from './pages/SignUpPage';
-import SignInPage from './pages/SignInPage';
+import LogInPage from './pages/LogInPage';
 
 const router = createBrowserRouter([
   {
@@ -32,7 +32,7 @@ const router = createBrowserRouter([
       },
       {
         path: 'signin',
-        element: <SignInPage />,
+        element: <LogInPage />,
       },
     ],
   },
