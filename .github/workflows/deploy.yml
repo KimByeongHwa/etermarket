@@ -29,6 +29,8 @@ jobs:
     runs-on: ubuntu-latest
     env:
       PUBLIC_URL: /etermarket/
+      VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+      VITE_SUPABASE_PUBLIC_KEY: ${{ secrets.VITE_SUPABASE_PUBLIC_KEY }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4

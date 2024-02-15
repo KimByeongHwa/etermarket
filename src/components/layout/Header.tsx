@@ -26,12 +26,12 @@ export default function Header() {
             <Bars3Icon className='h-6 w-6' aria-hidden='true' />
           </button>
         </div>
-        <Popover.Group className='hidden lg:flex lg:gap-x-12 text-sm font-semibold leading-6 text-gray-900'>
+        <Popover.Group className='hidden lg:flex lg:gap-x-12 font-semibold leading-6 text-gray-900'>
           <Link to='/etermarket/search-item'>매물 검색</Link>
           <Link to='/etermarket/sell-item'>매물 등록</Link>
           <Link to='/etermarket/trade-history'>시세 조회</Link>
         </Popover.Group>
-        <div className='hidden lg:flex lg:flex-1 lg:justify-end lg:gap-x-6 text-sm font-semibold leading-6 text-gray-900'>
+        <div className='hidden lg:flex lg:flex-1 lg:justify-end lg:gap-x-6 font-semibold leading-6 text-gray-900'>
           <SignInModal />
         </div>
       </nav>

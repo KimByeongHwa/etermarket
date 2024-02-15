@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import supabase from '@/lib/supabase';
-import useSignInWithKaKao from '@/hooks/useSignInWithKaKao';
+import signInWithKaKao from '@/api/signInWithKaKao';
 import {
   Dialog,
   DialogContent,
@@ -76,7 +76,7 @@ export default function SignInModal() {
               <DialogDescription>아직 회원이 아니신가요?</DialogDescription>
               <Button
                 type='submit'
-                onClick={useSignInWithKaKao}
+                onClick={signInWithKaKao}
                 className='w-full my-3 rounded-xl bg-kakaoYellow hover:bg-kakaoYellow text-kakaoBlack'
               >
                 <div className='mr-2'>
