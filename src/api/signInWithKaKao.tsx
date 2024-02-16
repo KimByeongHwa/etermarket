@@ -1,6 +1,6 @@
 import supabase from '@/lib/supabase';
 
-export default async function signInWithKaKao() {
+export default async function signInWithKakao() {
   try {
     await supabase.auth.signInWithOAuth({
       provider: 'kakao',

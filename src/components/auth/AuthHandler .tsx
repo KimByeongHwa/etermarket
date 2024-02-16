@@ -1,6 +1,6 @@
 import { useState, useEffect, FormEvent } from 'react';
 import supabase from '@/lib/supabase';
-import signInWithKaKao from '@/api/signInWithKaKao';
+import signInWithKakao from '@/api/signInWithKakao';
 import {
   Dialog,
   DialogContent,
@@ -17,15 +17,14 @@ export default function AuthHandler() {
 
   async function checkLogin() {
     // 임시
-    const authInfo = await supabase.auth.getSession();
-    const session = authInfo.data.session;
-
+    // const authInfo = await supabase.auth.getSession();
+    // const session = authInfo.data.session;
     // if (session) setIsLogin(true);
-    console.log(session);
+    // console.log(session);
   }
 
   const handleKakaoLogin = async () => {
-    await signInWithKaKao().then(res => console.log(res));
+    await signInWithKakao();
   };
 
   const handleLogIn = (e: FormEvent) => {

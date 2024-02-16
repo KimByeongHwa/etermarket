@@ -1,5 +1,6 @@
 import { useForm } from 'react-hook-form';
 import { SignUpFormData } from '@/../types';
+import handleSignUp from '@/api/handleSignUp';
 
 export default function SingUpPage() {
   const {
@@ -10,11 +11,6 @@ export default function SingUpPage() {
   } = useForm<SignUpFormData>({ mode: 'onBlur' });
 
   const userPwInput = watch('userPw');
-
-  const handleSignUp = (data: SignUpFormData) => {
-    // TODO: 회원가입 함수 구현(with supabase)
-    console.log(data);
-  };
 
   return (
     <div className='flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8'>
@@ -35,6 +31,7 @@ export default function SingUpPage() {
                 className='block w-full rounded-md border-0 px-3 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
                 {...register('userId', {
                   required: '아이디를 입력해 주세요.',
+                  pattern: { value: /^[a-z0-9]+$/, message: '아이디는 영문 소문자와 숫자만 사용 가능합니다.' },
                   minLength: { value: 4, message: '아이디는 4자 이상이어야 합니다.' },
                   maxLength: { value: 18, message: '아이디는 18자 이하이어야 합니다.' },
                 })}
