@@ -1,5 +1,5 @@
 import supabase from '@/lib/supabase';
-import { SignUpFormData } from 'types';
+import { SignUpFormData } from '@/types/authTypes';
 import Swal from 'sweetalert2';
 
 export default async function handleSignUp(data: SignUpFormData) {
@@ -50,4 +50,6 @@ export default async function handleSignUp(data: SignUpFormData) {
       });
     }
   }
+
+  localStorage.removeItem('kakaoSession');
 }

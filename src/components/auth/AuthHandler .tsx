@@ -1,4 +1,4 @@
-import { useState, useEffect, FormEvent } from 'react';
+import { useState, useEffect } from 'react';
 import supabase from '@/lib/supabase';
 import signInWithKakao from '@/api/signInWithKakao';
 import {
@@ -11,30 +11,47 @@ import {
 } from '@/components/ui/dialog';
 import { Button } from '../ui/button';
 import KaKaoSymbol from '@/assets/svg/KaKaoSymbol';
+import handleLogIn from '@/api/handleLogIn';
 
 export default function AuthHandler() {
-  const [isLogin, setIsLogin] = useState(false);
-
-  async function checkLogin() {
-    // 임시
-    // const authInfo = await supabase.auth.getSession();
-    // const session = authInfo.data.session;
-    // if (session) setIsLogin(true);
-    // console.log(session);
-  }
+  const [inputs, setInputs] = useState({
+    userId: '',
+    userPw: '',
+  });
+  const [errorMessage, setErrorMessage] = useState<string | null>('');
+  const [isLogInFalied, setIsLogInFalied] = useState(false);
+  const [isLogIn, setIsLogIn] = useState(false);
 
   const handleKakaoLogin = async () => {
     await signInWithKakao();
   };
 
-  const handleLogIn = (e: FormEvent) => {
-    e.preventDefault();
-    console.log('로그인하기');
+  const submitLogIn = () => {
+    handleLogIn(inputs).then(res => {
+      console.log(res);
+
+      if (res.success === true) {
+        setIsLogInFalied(false);
+        localStorage.setItem('userData', JSON.stringify(res.data));
+        window.location.href = '/etermarket/';
+      } else {
+        setIsLogInFalied(true);
+        setErrorMessage(res.errorMessage);
+      }
+    });
   };
+
+  async function checkLogin() {
+    const logInUserData = localStorage.getItem('userData');
+
+    if (logInUserData) setIsLogIn(true);
+    else setIsLogIn(false);
+  }
 
   const handleLogOut = async () => {
     await supabase.auth.signOut();
-    setIsLogin(false);
+    localStorage.removeItem('userData');
+    checkLogin();
   };
 
   useEffect(() => {
@@ -43,7 +60,7 @@ export default function AuthHandler() {
 
   return (
     <>
-      {isLogin ? (
+      {isLogIn ? (
         <button type='button' onClick={handleLogOut}>
           로그아웃
         </button>
@@ -55,13 +72,15 @@ export default function AuthHandler() {
               <DialogTitle className='text-center mt-2 text-xl'>로그인</DialogTitle>
             </DialogHeader>
 
-            <form className='w-3/5 mx-auto'>
+            <form onSubmit={e => e.preventDefault()} className='w-3/5 mx-auto'>
               <label htmlFor='userId' className='block text-start font-medium leading-6 text-gray-900'>
                 아이디
               </label>
               <input
                 type='text'
                 id='userId'
+                value={inputs.userId}
+                onChange={e => setInputs({ ...inputs, userId: e.target.value })}
                 className='block w-full rounded-md border-0 mt-2 px-3 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
               />
 
@@ -72,12 +91,17 @@ export default function AuthHandler() {
                 type='password'
                 autoComplete='off'
                 id='userPw'
+                value={inputs.userPw}
+                onChange={e => setInputs({ ...inputs, userPw: e.target.value })}
                 className='block w-full rounded-md border-0 mt-2 px-3 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
               />
 
-              <Button type='submit' onClick={handleLogIn} className='w-full mt-8 rounded-md'>
-                로그인하기
-              </Button>
+              <div className='mt-8'>
+                {isLogInFalied && <div className='mb-4 text-red-500'>{errorMessage}</div>}
+                <Button type='submit' onClick={submitLogIn} className='w-full rounded-md'>
+                  로그인하기
+                </Button>
+              </div>
             </form>
 
             <div className='w-3/5 mt-4 mx-auto'>
