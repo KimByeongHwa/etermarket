@@ -7,8 +7,16 @@ import AuthHandler from '../auth/AuthHandler ';
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
+  let nickname;
+
+  const logInUserData = localStorage.getItem('userData');
+
+  if (logInUserData) {
+    nickname = JSON.parse(logInUserData).nickname;
+  }
+
   return (
-    <header className='bg-white'>
+    <header>
       <nav className='mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8' aria-label='Global'>
         <div className='flex lg:flex-1'>
           <Link to='/etermarket/' className='-m-1.5 p-1.5 font-roboto text-lg font-bold'>
@@ -31,7 +39,12 @@ export default function Header() {
           <Link to='/etermarket/sell-item'>매물 등록</Link>
           <Link to='/etermarket/trade-history'>시세 조회</Link>
         </Popover.Group>
-        <div className='hidden lg:flex lg:flex-1 lg:justify-end lg:gap-x-6 font-semibold leading-6 text-gray-900'>
+        <div className='hidden lg:flex lg:flex-1 lg:justify-end lg:gap-x-12 font-semibold leading-6 text-gray-900'>
+          {nickname && (
+            <Link to='/etermarket/mypage' className='cursor-pointer'>
+              {nickname} 님
+            </Link>
+          )}
           <AuthHandler />
         </div>
       </nav>
@@ -66,7 +79,19 @@ export default function Header() {
                 </Link>
               </div>
               <div className='py-6 text-base font-semibold leading-7 text-gray-900'>
-                <AuthHandler />
+                {nickname && (
+                  <div>
+                    <Link
+                      to='/etermarket/mypage'
+                      className='cursor-pointer -mx-3 block rounded-lg px-3 py-2 hover:bg-gray-50'
+                    >
+                      {nickname} 님
+                    </Link>
+                  </div>
+                )}
+                <div className='cursor-pointer -mx-3 block rounded-lg px-3 py-2 hover:bg-gray-50'>
+                  <AuthHandler />
+                </div>
               </div>
             </div>
           </div>

@@ -51,7 +51,7 @@ export default function AuthHandler() {
   const handleLogOut = async () => {
     await supabase.auth.signOut();
     localStorage.removeItem('userData');
-    checkLogin();
+    window.location.href = '/etermarket/';
   };
 
   useEffect(() => {
