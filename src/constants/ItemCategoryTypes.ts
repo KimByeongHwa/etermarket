@@ -1,16 +1,16 @@
 const firstCategory = [
   { value: 'weapon', text: '무기' },
   { value: 'armor', text: '방어구' },
-  { value: 'accessory', text: '장신구' },
+  { value: 'accessory', text: '악세사리' },
   { value: 'costume', text: '코스튬' },
   { value: 'wing', text: '날개' },
-  { value: 'el', text: 'EL' },
   { value: 'etc', text: '기타' },
 ];
 
+// 무기, 방어구, 악세사리
 const clCategory = [
   { value: 'cl', text: 'CL' },
-  { value: 'noncl', text: 'NonCL' },
+  { value: 'non_cl', text: 'NonCL' },
 ];
 
 const gradeCategory = [
@@ -28,11 +28,7 @@ const gradeCategory = [
   { value: '12', text: '12등급' },
 ];
 
-const illegalCategory = [
-  { value: 'legal', text: '합법 무기' },
-  { value: 'illegal', text: '불법 무기' },
-];
-
+// 무기
 const weaponDistanceCategory = [
   { value: 'short', text: '근거리 무기' },
   { value: 'long', text: '원거리 무기' },
@@ -40,10 +36,10 @@ const weaponDistanceCategory = [
 
 const shortWeponCategory = [
   { value: 'sword', text: '도검' },
-  { value: 'hammer', text: '해머(둔기)' },
+  { value: 'hammer', text: '해머' },
   { value: 'axe', text: '도끼' },
-  { value: 'scythe', text: '낫(미늘창)' },
-  { value: 'spear', text: '창(장창)' },
+  { value: 'scythe', text: '낫' },
+  { value: 'spear', text: '창' },
 ];
 
 const longWeaponCategory = [
@@ -57,14 +53,33 @@ const longWeaponCategory = [
   { value: 'pistol', text: '권총' },
 ];
 
+const legalCategory = [
+  { value: 'legal', text: '합법 무기' },
+  { value: 'illegal', text: '불법 무기' },
+];
+
+// 방어구
+const armorCategory = [
+  { value: 'human', text: '휴먼셋' },
+  { value: 'mutant', text: '변이옷' },
+];
+
+// 날개
+const wingCategory = [
+  { value: 'attack', text: '공날' },
+  { value: 'critical', text: '치날' },
+];
+
 const categories = {
   firstCategory,
   clCategory,
   gradeCategory,
-  illegalCategory,
   weaponDistanceCategory,
   shortWeponCategory,
   longWeaponCategory,
+  legalCategory,
+  armorCategory,
+  wingCategory,
 };
 
 export default categories;
