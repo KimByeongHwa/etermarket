@@ -1,37 +1,10 @@
+import { useEffect } from 'react';
 import SelectBox from '@/components/common/SelectBox';
 import categories from '@/constants/ItemCategoryTypes';
-import selectedValuesType from '@/constants/selectedValuesType';
-import { useEffect, useState } from 'react';
+import { useSelectedValues } from '@/hooks/useSelectedValues';
 
 export default function SellItemPage() {
-  const [selectedValues, setSelectedValues] = useState<selectedValuesType>({
-    firstSelected: '',
-    distanceSelected: null,
-    legalSelected: null,
-    shortWeaponSelected: null,
-    longWeaponSelected: null,
-    armorSelected: null,
-    clSelected: null,
-    gradeSelected: null,
-  });
-
-  const getSelectedValue = (name: string) => (value: string) => {
-    if (name === 'firstSelected') {
-      setSelectedValues({
-        firstSelected: value,
-        distanceSelected: null,
-        legalSelected: null,
-        clSelected: null,
-        shortWeaponSelected: null,
-        longWeaponSelected: null,
-        gradeSelected: null,
-        armorSelected: null,
-        wingSelected: null,
-      });
-    } else {
-      setSelectedValues(prev => ({ ...prev, [name]: value }));
-    }
-  };
+  const { selectedValues, getSelectedValue } = useSelectedValues();
 
   useEffect(() => {
     console.log(selectedValues);
