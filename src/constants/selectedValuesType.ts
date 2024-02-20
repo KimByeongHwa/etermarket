@@ -5,6 +5,7 @@ export default interface selectedValuesType {
   shortWeaponSelected?: string | null;
   longWeaponSelected?: string | null;
   armorSelected: string | null;
+  genderSelected: string | null;
   clSelected?: string | null;
   gradeSelected?: string | null;
   wingSelected?: string | null;

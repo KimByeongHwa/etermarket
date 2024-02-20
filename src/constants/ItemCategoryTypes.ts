@@ -64,6 +64,11 @@ const armorCategory = [
   { value: 'mutant', text: '변이옷' },
 ];
 
+const genderCategory = [
+  { value: 'man', text: '男' },
+  { value: 'woman', text: '女' },
+];
+
 // 날개
 const wingCategory = [
   { value: 'attack', text: '공날' },
@@ -79,6 +84,7 @@ const categories = {
   longWeaponCategory,
   legalCategory,
   armorCategory,
+  genderCategory,
   wingCategory,
 };
 

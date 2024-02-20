@@ -2,12 +2,13 @@ import { useEffect } from 'react';
 import SelectBox from '@/components/common/SelectBox';
 import categories from '@/constants/ItemCategoryTypes';
 import { useSelectedValues } from '@/hooks/useSelectedValues';
+import getSelectedItem from '@/api/getSelectedItem';
 
 export default function SellItemPage() {
   const { selectedValues, getSelectedValue } = useSelectedValues();
 
   useEffect(() => {
-    console.log(selectedValues);
+    getSelectedItem(selectedValues);
   }, [selectedValues]);
 
   return (
@@ -21,6 +22,13 @@ export default function SellItemPage() {
           items={categories.firstCategory}
           onChange={getSelectedValue('firstSelected')}
         />
+        {selectedValues.firstSelected === 'armor' && (
+          <SelectBox
+            placeholder='성별 선택'
+            items={categories.genderCategory}
+            onChange={getSelectedValue('genderCategory')}
+          />
+        )}
         {selectedValues.firstSelected === 'armor' && (
           <SelectBox
             placeholder='휴먼 / 변이 선택'
