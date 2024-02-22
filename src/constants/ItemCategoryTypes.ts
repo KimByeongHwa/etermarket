@@ -10,7 +10,7 @@ const firstCategory = [
 // 무기, 방어구, 악세사리
 const clCategory = [
   { value: 'cl', text: 'CL' },
-  { value: 'non_cl', text: 'NonCL' },
+  { value: 'noncl', text: 'NonCL' },
 ];
 
 const gradeCategory = [
