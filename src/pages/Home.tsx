@@ -1,5 +1,7 @@
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { useNavigate } from 'react-router-dom';
+import LogInModal from '@/components/auth/LogInModal';
 
 const features = [
   {
@@ -14,6 +16,10 @@ const features = [
 ];
 
 export default function Home() {
+  const navigate = useNavigate();
+
+  const logInUserData = localStorage.getItem('userData');
+
   return (
     <div className=' mx-auto my-20 max-w-7xl px-6 lg:my-28 lg:px-8'>
       <div className='mx-auto max-w-2xl text-center'>
@@ -33,7 +39,18 @@ export default function Home() {
         </dl>
       </div>
       <div className='text-center'>
-        <Button className='h-11 rounded-md px-24 sm:h-12 sm:px-28 sm:text-lg'>입장하기</Button>
+        {logInUserData ? (
+          <Button
+            onClick={() => navigate('/etermarket/search-item')}
+            className='h-11 rounded-md px-24 sm:h-12 sm:px-28 sm:text-lg'
+          >
+            입장하기
+          </Button>
+        ) : (
+          <LogInModal
+            trigger={<Button className='h-11 rounded-md px-24 sm:h-12 sm:px-28 sm:text-lg'>입장하기</Button>}
+          />
+        )}
       </div>
     </div>
   );

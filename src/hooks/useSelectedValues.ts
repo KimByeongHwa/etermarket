@@ -9,6 +9,7 @@ export const useSelectedValues = () => {
     shortWeaponSelected: null,
     longWeaponSelected: null,
     armorSelected: null,
+    genderSelected: null,
     clSelected: null,
     gradeSelected: null,
   });
@@ -24,6 +25,7 @@ export const useSelectedValues = () => {
         longWeaponSelected: null,
         gradeSelected: null,
         armorSelected: null,
+        genderSelected: null,
         wingSelected: null,
       });
     } else {
