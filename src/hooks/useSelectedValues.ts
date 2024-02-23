@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import selectedValuesType from '@/types/selectedValuesType';
+import SelectedValues from '@/types/selectedValues.type';
 
 export const useSelectedValues = () => {
-  const [selectedValues, setSelectedValues] = useState<selectedValuesType>({
+  const [selectedValues, setSelectedValues] = useState<SelectedValues>({
     firstSelected: '',
     distanceSelected: null,
     legalSelected: null,
@@ -33,5 +33,5 @@ export const useSelectedValues = () => {
     }
   };
 
-  return { selectedValues, getSelectedValuesObject };
+  return { selectedValues, setSelectedValues, getSelectedValuesObject };
 };

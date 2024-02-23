@@ -1,5 +1,5 @@
 import supabase from '@/lib/supabase';
-import { LoginResultData } from '@/types/authTypes';
+import { LoginResultData } from '@/types/authData.type';
 
 export default async function handleLogIn(inputs: { userId: string; userPw: string }): Promise<LoginResultData> {
   console.log(inputs);

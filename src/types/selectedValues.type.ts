@@ -1,4 +1,4 @@
-export default interface selectedValuesType {
+export default interface SelectedValues {
   firstSelected: string;
   distanceSelected?: string | null;
   legalSelected?: string | null;

@@ -1,12 +1,12 @@
 import SelectBox from '@/components/common/SelectBox';
 import categories from '@/constants/ItemCategoryTypes';
-import selectedValuesType from '@/types/selectedValuesType';
+import SelectedValues from '@/types/selectedValues.type';
 
 export default function ConditionalSelectBox({
   selectedValues,
   getSelectedValuesObject,
 }: {
-  selectedValues: selectedValuesType;
+  selectedValues: SelectedValues;
   getSelectedValuesObject: (name: string) => (value: string) => void;
 }) {
   return (

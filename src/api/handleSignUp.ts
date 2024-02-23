@@ -1,5 +1,5 @@
 import supabase from '@/lib/supabase';
-import { SignUpFormData } from '@/types/authTypes';
+import { SignUpFormData } from '@/types/authData.type';
 import Swal from 'sweetalert2';
 
 export default async function handleSignUp(data: SignUpFormData) {
