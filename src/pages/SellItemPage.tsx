@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import Swal from 'sweetalert2';
 import ItemBox from '@/components/trade/ItemBox';
 import Item from '@/types/item.type';
-import defaultImage from '@/../public/no-image.jpg';
+import defaultImage from '@/assets/noImage.jpg';
 
 export default function SellItemPage() {
   const [isSelectCondition, setIsSelectCondition] = useState(false);
@@ -72,6 +72,7 @@ export default function SellItemPage() {
               searchedItems.map(item => {
                 return (
                   <ItemBox
+                    key={item.item_name}
                     itemName={item.item_name}
                     imgSrc={item.img_url || defaultImage}
                     onClick={() => {

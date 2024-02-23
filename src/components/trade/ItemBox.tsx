@@ -17,7 +17,7 @@ export default function ItemBox({
       }`}
     >
       <div className='flex items-center justify-center w-1/2'>
-        <img src={imgSrc} alt='아이템 이미지' />
+        <img src={imgSrc} alt='아이템 이미지' className='max-w-[140px]' />
       </div>
       <div className='font-medium'>{itemName}</div>
     </div>
