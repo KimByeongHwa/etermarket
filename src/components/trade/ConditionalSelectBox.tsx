@@ -1,6 +1,7 @@
 import SelectBox from '@/components/common/SelectBox';
 import categories from '@/constants/ItemCategoryTypes';
 import SelectedValues from '@/types/selectedValues.type';
+import { Button } from '../ui/button';
 
 export default function ConditionalSelectBox({
   selectedValues,
@@ -9,6 +10,10 @@ export default function ConditionalSelectBox({
   selectedValues: SelectedValues;
   getSelectedValuesObject: (name: string) => (value: string) => void;
 }) {
+  const handleSelectBoxes = () => {
+    // 1차 선택에 따른 유효성 검사를 여기서 수행
+    // getSelectedItem에선 data fetch 기능만 수행
+  };
   return (
     <>
       <SelectBox
@@ -27,7 +32,7 @@ export default function ConditionalSelectBox({
         <SelectBox
           placeholder='휴먼 / 변이 선택'
           items={categories.armorCategory}
-          onChange={getSelectedValuesObject('armorSelected')}
+          onChange={getSelectedValuesObject('raceSelected')}
         />
       )}
       {selectedValues.firstSelected === 'weapon' && (
@@ -45,17 +50,14 @@ export default function ConditionalSelectBox({
         />
       )}
       {(selectedValues.firstSelected === 'weapon' ||
-        (selectedValues.firstSelected === 'armor' && selectedValues.armorSelected === 'mutant') ||
-        selectedValues.firstSelected === 'accessory' ||
-        selectedValues.firstSelected === 'costume') && (
+        (selectedValues.firstSelected === 'armor' && selectedValues.raceSelected === 'mutant')) && (
         <SelectBox
           placeholder='CL / NonCL 선택'
           items={categories.clCategory}
           onChange={getSelectedValuesObject('clSelected')}
         />
       )}
-      {(selectedValues.firstSelected === 'weapon' ||
-        (selectedValues.firstSelected === 'accessory' && selectedValues.clSelected === 'noncl')) && (
+      {selectedValues.firstSelected === 'weapon' && (
         <SelectBox
           placeholder='등급 선택'
           items={categories.gradeCategory}
@@ -76,13 +78,10 @@ export default function ConditionalSelectBox({
           onChange={getSelectedValuesObject('longWeaponSelected')}
         />
       )}
-      {selectedValues.firstSelected === 'wing' && (
-        <SelectBox
-          placeholder='날개 옵션 선택'
-          items={categories.wingCategory}
-          onChange={getSelectedValuesObject('wingSelected')}
-        />
-      )}
+
+      <Button onClick={handleSelectBoxes} className='mt-6'>
+        확인
+      </Button>
     </>
   );
 }

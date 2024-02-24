@@ -13,7 +13,6 @@ export default async function getSelectedItem({ ...props }: SelectedValues) {
           gradeSelected: props.gradeSelected,
           weaponSelected: props.shortWeaponSelected || props.longWeaponSelected,
         };
-        console.log(argument);
 
         const { data, error } = await supabase
           .from('weapon')
@@ -23,13 +22,32 @@ export default async function getSelectedItem({ ...props }: SelectedValues) {
           .eq('grade', argument.gradeSelected)
           .eq('legal_type', argument.legalSelected)
           .eq('weapon_type', argument.weaponSelected);
+
+        return { data, error };
+      }
+
+      case 'armor': {
+        const argument = {
+          genderSelected: props.genderSelected,
+          clSelected: props.clSelected,
+          grade: props.gradeSelected,
+        };
+        console.log(argument);
+
+        const { data, error } = await supabase
+          .from('armor_mutant')
+          .select('*')
+          .eq('gender', argument.genderSelected)
+          .eq('cl_type', argument.clSelected)
+          .eq('grade', argument.clSelected);
+
         return { data, error };
       }
     }
   } catch {
     Swal.fire({
       html: '모든 선택을 완료해주세요.',
-      icon: 'error',
+      icon: 'warning',
       confirmButtonColor: '#172554',
       confirmButtonText: '확인',
     });
