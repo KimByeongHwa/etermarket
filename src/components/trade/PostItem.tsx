@@ -1,16 +1,18 @@
+import { FetchedMutantArmorItem, FetchedWeaponItem } from '@/types/fetchedItem.type';
+
 export default function PostItem({
   firstSelected,
-  selectedItemName,
+  selectedItem,
 }: {
   firstSelected: string;
-  selectedItemName: string | null;
+  selectedItem?: FetchedWeaponItem | FetchedMutantArmorItem | null;
 }) {
   const category = firstSelected;
-  const itemName = selectedItemName;
+  const item = selectedItem;
 
   return (
     <div>
-      {category}, {itemName}
+      {category}, {item?.item_name}
     </div>
   );
 }

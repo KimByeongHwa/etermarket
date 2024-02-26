@@ -1,19 +1,110 @@
+import fetchSelectedItem from '@/api/fetchSelectedItem';
+import CustomAlert from '@/components/common/CustomAlert';
 import SelectBox from '@/components/common/SelectBox';
+import { Button } from '@/components/ui/button';
 import categories from '@/constants/ItemCategoryTypes';
 import SelectedValues from '@/types/selectedValues.type';
-import { Button } from '../ui/button';
+import { MutantArmorArgument } from '@/types/itemFetchArgument.type';
+import { FetchedWeaponItem, FetchedMutantArmorItem } from '@/types/fetchedItem.type';
 
 export default function ConditionalSelectBox({
   selectedValues,
   getSelectedValuesObject,
+  setFetchedItems,
 }: {
   selectedValues: SelectedValues;
   getSelectedValuesObject: (name: string) => (value: string) => void;
+  setFetchedItems: (items: FetchedWeaponItem[] | FetchedMutantArmorItem[]) => void;
 }) {
-  const handleSelectBoxes = () => {
-    // 1차 선택에 따른 유효성 검사를 여기서 수행
-    // getSelectedItem에선 data fetch 기능만 수행
+  const isValidArgument = (argument: Partial<SelectedValues>) => {
+    if (Object.keys(argument).length === 0) {
+      return false;
+    }
+
+    for (const key in argument) {
+      const keyOfArgument = argument[key as keyof SelectedValues];
+      if (keyOfArgument === null) {
+        return false;
+      }
+    }
+    return true;
   };
+
+  const handleSelectBoxes = () => {
+    if (selectedValues.firstSelected === '') {
+      CustomAlert('1차 분류를 선택해주세요.', 'warning');
+      return;
+    }
+
+    switch (selectedValues.firstSelected) {
+      case 'weapon': {
+        const argument = {
+          distanceSelected: selectedValues.distanceSelected || null,
+          legalSelected: selectedValues.legalSelected || null,
+          clSelected: selectedValues.clSelected || null,
+          gradeSelected: selectedValues.gradeSelected || null,
+          weaponSelected: selectedValues.shortWeaponSelected || selectedValues.longWeaponSelected || null,
+        };
+
+        if (!isValidArgument(argument)) {
+          CustomAlert('모든 선택을 완료해주세요', 'warning');
+          return;
+        }
+
+        fetchSelectedItem(selectedValues.firstSelected, argument).then(res => {
+          if (res?.data) setFetchedItems(res.data);
+        });
+
+        break;
+      }
+      case 'armor': {
+        let argument: MutantArmorArgument;
+
+        if (selectedValues.raceSelected === null) {
+          CustomAlert('모든 선택을 완료해주세요', 'warning');
+          return;
+        }
+
+        if (selectedValues.raceSelected === 'human') {
+          console.log('go to post step');
+        } else if (selectedValues.raceSelected === 'mutant') {
+          argument = {
+            genderSelected: selectedValues.genderSelected || null,
+            clSelected: selectedValues.clSelected || null,
+            gradeSelected: selectedValues.gradeSelected || null,
+          };
+
+          if (!isValidArgument(argument)) {
+            CustomAlert('모든 선택을 완료해주세요', 'warning');
+            return;
+          }
+
+          fetchSelectedItem(selectedValues.firstSelected, argument).then(res => {
+            if (res?.data) setFetchedItems(res.data);
+          });
+        }
+
+        break;
+      }
+      case 'accessory': {
+        console.log('악세에 관하여');
+        break;
+      }
+      case 'costume': {
+        console.log('코스튬에 관하여');
+        break;
+      }
+      case 'wing': {
+        console.log('날개에 관하여');
+        break;
+      }
+      case 'etc': {
+        console.log('기타템에 관하여');
+        break;
+      }
+    }
+  };
+
   return (
     <>
       <SelectBox
@@ -23,16 +114,16 @@ export default function ConditionalSelectBox({
       />
       {selectedValues.firstSelected === 'armor' && (
         <SelectBox
-          placeholder='성별 선택'
-          items={categories.genderCategory}
-          onChange={getSelectedValuesObject('genderCategory')}
-        />
-      )}
-      {selectedValues.firstSelected === 'armor' && (
-        <SelectBox
           placeholder='휴먼 / 변이 선택'
           items={categories.armorCategory}
           onChange={getSelectedValuesObject('raceSelected')}
+        />
+      )}
+      {selectedValues.firstSelected === 'armor' && selectedValues.raceSelected === 'mutant' && (
+        <SelectBox
+          placeholder='성별 선택'
+          items={categories.genderCategory}
+          onChange={getSelectedValuesObject('genderSelected')}
         />
       )}
       {selectedValues.firstSelected === 'weapon' && (
@@ -57,7 +148,8 @@ export default function ConditionalSelectBox({
           onChange={getSelectedValuesObject('clSelected')}
         />
       )}
-      {selectedValues.firstSelected === 'weapon' && (
+      {(selectedValues.firstSelected === 'weapon' ||
+        (selectedValues.firstSelected === 'armor' && selectedValues.raceSelected === 'mutant')) && (
         <SelectBox
           placeholder='등급 선택'
           items={categories.gradeCategory}
