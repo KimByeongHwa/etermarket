@@ -2,8 +2,6 @@ import supabase from '@/lib/supabase';
 import { LoginResultData } from '@/types/authData.type';
 
 export default async function handleLogIn(inputs: { userId: string; userPw: string }): Promise<LoginResultData> {
-  console.log(inputs);
-
   try {
     const { data, error } = await supabase.from('users').select('*').eq('user_id', inputs.userId).maybeSingle();
 

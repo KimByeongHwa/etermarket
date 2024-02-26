@@ -26,8 +26,6 @@ export default function LogInModal({ trigger }: { trigger: string | ReactElement
 
   const submitLogIn = () => {
     handleLogIn(inputs).then(res => {
-      console.log(res);
-
       if (res.success === true) {
         setIsLogInFalied(false);
         localStorage.setItem('userData', JSON.stringify(res.data));
@@ -41,7 +39,7 @@ export default function LogInModal({ trigger }: { trigger: string | ReactElement
 
   return (
     <Dialog>
-      <DialogTrigger>{trigger}</DialogTrigger>
+      <DialogTrigger className='w-full text-start'>{trigger}</DialogTrigger>
       <DialogContent className='text-center'>
         <DialogHeader>
           <DialogTitle className='text-center mt-2 text-xl'>로그인</DialogTitle>

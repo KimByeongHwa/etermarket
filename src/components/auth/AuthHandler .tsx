@@ -23,14 +23,14 @@ export default function AuthHandler() {
   }, []);
 
   return (
-    <>
+    <div className='w-full lg:w-auto'>
       {isLogIn ? (
-        <button type='button' onClick={handleLogOut}>
+        <button type='button' onClick={handleLogOut} className='w-full text-start lg:w-auto'>
           로그아웃
         </button>
       ) : (
         <LogInModal trigger='로그인' />
       )}
-    </>
+    </div>
   );
 }
