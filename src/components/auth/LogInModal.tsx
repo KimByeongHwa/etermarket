@@ -26,8 +26,6 @@ export default function LogInModal({ trigger }: { trigger: string | ReactElement
 
   const submitLogIn = () => {
     handleLogIn(inputs).then(res => {
-      console.log(res);
-
       if (res.success === true) {
         setIsLogInFalied(false);
         localStorage.setItem('userData', JSON.stringify(res.data));

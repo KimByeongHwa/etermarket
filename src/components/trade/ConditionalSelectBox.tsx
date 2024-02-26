@@ -6,6 +6,7 @@ import categories from '@/constants/ItemCategoryTypes';
 import SelectedValues from '@/types/selectedValues.type';
 import { MutantArmorParameter } from '@/types/itemFetchParameter.type';
 import { FetchedWeaponItem, FetchedMutantArmorItem } from '@/types/fetchedItem.type';
+import checkAuthentication from '@/api/checkAuthentication';
 
 export default function ConditionalSelectBox({
   selectedValues,
@@ -30,7 +31,14 @@ export default function ConditionalSelectBox({
     return true;
   };
 
-  const handleSelectBoxes = () => {
+  const handleSelectBoxes = async () => {
+    const isAuthenticated = await checkAuthentication();
+
+    if (!isAuthenticated) {
+      CustomAlert('로그인 후 이용해주세요.', 'warning');
+      return;
+    }
+
     if (selectedValues.firstSelected === '') {
       CustomAlert('1차 분류를 선택해주세요.', 'warning');
       return;
