@@ -1,34 +1,34 @@
 import supabase from '@/lib/supabase';
 import CustomAlert from '@/components/common/CustomAlert';
-import { WeaponArgument, MutantArmorArgument } from '@/types/itemFetchArgument.type';
+import { WeaponParameter, MutantArmorParameter } from '@/types/itemFetchParameter.type';
 
 export default async function fetchSelectedItem(
   firstSelected: 'weapon' | 'armor',
-  argument: WeaponArgument | MutantArmorArgument,
+  parameter: WeaponParameter | MutantArmorParameter,
 ) {
   try {
     if (firstSelected === 'weapon') {
-      const weaponArgument = argument as WeaponArgument;
+      const weaponParameter = parameter as WeaponParameter;
       const { data, error } = await supabase
         .from('weapon')
         .select('*')
-        .eq('cl_type', weaponArgument.clSelected)
-        .eq('distance_type', weaponArgument.distanceSelected)
-        .eq('grade', weaponArgument.gradeSelected)
-        .eq('legal_type', weaponArgument.legalSelected)
-        .eq('weapon_type', weaponArgument.weaponSelected);
+        .eq('cl_type', weaponParameter.clSelected)
+        .eq('distance_type', weaponParameter.distanceSelected)
+        .eq('grade', weaponParameter.gradeSelected)
+        .eq('legal_type', weaponParameter.legalSelected)
+        .eq('weapon_type', weaponParameter.weaponSelected);
 
       return { data, error };
     }
 
     if (firstSelected === 'armor') {
-      const mutantArmorArgument = argument as MutantArmorArgument;
+      const mutantArmorParameter = parameter as MutantArmorParameter;
       const { data, error } = await supabase
         .from('mutant_armor')
         .select('*')
-        .eq('gender', mutantArmorArgument.genderSelected)
-        .eq('cl_type', mutantArmorArgument.clSelected)
-        .eq('grade', mutantArmorArgument.gradeSelected);
+        .eq('gender', mutantArmorParameter.genderSelected)
+        .eq('cl_type', mutantArmorParameter.clSelected)
+        .eq('grade', mutantArmorParameter.gradeSelected);
 
       return { data, error };
     }

@@ -4,7 +4,7 @@ import SelectBox from '@/components/common/SelectBox';
 import { Button } from '@/components/ui/button';
 import categories from '@/constants/ItemCategoryTypes';
 import SelectedValues from '@/types/selectedValues.type';
-import { MutantArmorArgument } from '@/types/itemFetchArgument.type';
+import { MutantArmorParameter } from '@/types/itemFetchParameter.type';
 import { FetchedWeaponItem, FetchedMutantArmorItem } from '@/types/fetchedItem.type';
 
 export default function ConditionalSelectBox({
@@ -16,14 +16,14 @@ export default function ConditionalSelectBox({
   getSelectedValuesObject: (name: string) => (value: string) => void;
   setFetchedItems: (items: FetchedWeaponItem[] | FetchedMutantArmorItem[]) => void;
 }) {
-  const isValidArgument = (argument: Partial<SelectedValues>) => {
-    if (Object.keys(argument).length === 0) {
+  const isValidParameter = (parameter: Partial<SelectedValues>) => {
+    if (Object.keys(parameter).length === 0) {
       return false;
     }
 
-    for (const key in argument) {
-      const keyOfArgument = argument[key as keyof SelectedValues];
-      if (keyOfArgument === null) {
+    for (const key in parameter) {
+      const keyOfParameter = parameter[key as keyof SelectedValues];
+      if (keyOfParameter === null) {
         return false;
       }
     }
@@ -38,7 +38,7 @@ export default function ConditionalSelectBox({
 
     switch (selectedValues.firstSelected) {
       case 'weapon': {
-        const argument = {
+        const parameter = {
           distanceSelected: selectedValues.distanceSelected || null,
           legalSelected: selectedValues.legalSelected || null,
           clSelected: selectedValues.clSelected || null,
@@ -46,19 +46,19 @@ export default function ConditionalSelectBox({
           weaponSelected: selectedValues.shortWeaponSelected || selectedValues.longWeaponSelected || null,
         };
 
-        if (!isValidArgument(argument)) {
+        if (!isValidParameter(parameter)) {
           CustomAlert('모든 선택을 완료해주세요', 'warning');
           return;
         }
 
-        fetchSelectedItem(selectedValues.firstSelected, argument).then(res => {
+        fetchSelectedItem(selectedValues.firstSelected, parameter).then(res => {
           if (res?.data) setFetchedItems(res.data);
         });
 
         break;
       }
       case 'armor': {
-        let argument: MutantArmorArgument;
+        let parameter: MutantArmorParameter;
 
         if (selectedValues.raceSelected === null) {
           CustomAlert('모든 선택을 완료해주세요', 'warning');
@@ -68,18 +68,18 @@ export default function ConditionalSelectBox({
         if (selectedValues.raceSelected === 'human') {
           console.log('go to post step');
         } else if (selectedValues.raceSelected === 'mutant') {
-          argument = {
+          parameter = {
             genderSelected: selectedValues.genderSelected || null,
             clSelected: selectedValues.clSelected || null,
             gradeSelected: selectedValues.gradeSelected || null,
           };
 
-          if (!isValidArgument(argument)) {
+          if (!isValidParameter(parameter)) {
             CustomAlert('모든 선택을 완료해주세요', 'warning');
             return;
           }
 
-          fetchSelectedItem(selectedValues.firstSelected, argument).then(res => {
+          fetchSelectedItem(selectedValues.firstSelected, parameter).then(res => {
             if (res?.data) setFetchedItems(res.data);
           });
         }
