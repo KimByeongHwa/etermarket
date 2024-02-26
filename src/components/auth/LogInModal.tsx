@@ -41,7 +41,7 @@ export default function LogInModal({ trigger }: { trigger: string | ReactElement
 
   return (
     <Dialog>
-      <DialogTrigger>{trigger}</DialogTrigger>
+      <DialogTrigger className='w-full text-start'>{trigger}</DialogTrigger>
       <DialogContent className='text-center'>
         <DialogHeader>
           <DialogTitle className='text-center mt-2 text-xl'>로그인</DialogTitle>
