@@ -8,7 +8,7 @@ export const useSelectedValues = () => {
     legalSelected: null,
     shortWeaponSelected: null,
     longWeaponSelected: null,
-    armorSelected: null,
+    raceSelected: null,
     genderSelected: null,
     clSelected: null,
     gradeSelected: null,
@@ -24,7 +24,7 @@ export const useSelectedValues = () => {
         shortWeaponSelected: null,
         longWeaponSelected: null,
         gradeSelected: null,
-        armorSelected: null,
+        raceSelected: null,
         genderSelected: null,
         wingSelected: null,
       });

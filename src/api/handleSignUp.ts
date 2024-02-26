@@ -1,6 +1,6 @@
 import supabase from '@/lib/supabase';
+import CustomAlert from '@/components/common/CustomAlert';
 import { SignUpFormData } from '@/types/authData.type';
-import Swal from 'sweetalert2';
 
 export default async function handleSignUp(data: SignUpFormData) {
   try {
@@ -32,19 +32,9 @@ export default async function handleSignUp(data: SignUpFormData) {
           errorMessage = '이미 사용 중인 닉네임입니다.';
         }
 
-        Swal.fire({
-          html: errorMessage,
-          icon: 'error',
-          confirmButtonColor: '#172554',
-          confirmButtonText: '확인',
-        });
+        CustomAlert(errorMessage, 'error');
       } else {
-        Swal.fire({
-          html: '회원가입이 완료되었습니다.<br /> 새로 만든 아이디로 로그인 해주세요.',
-          icon: 'success',
-          confirmButtonColor: '#172554',
-          confirmButtonText: '확인',
-        }).then(res => {
+        CustomAlert('회원가입이 완료되었습니다.<br /> 새로 만든 아이디로 로그인 해주세요.', 'success').then(res => {
           if (res.isConfirmed) window.location.href = '/';
         });
       }
@@ -52,11 +42,6 @@ export default async function handleSignUp(data: SignUpFormData) {
 
     localStorage.removeItem('kakaoSession');
   } catch {
-    Swal.fire({
-      html: '카카오 인증 완료 후 접근해주세요.',
-      icon: 'error',
-      confirmButtonColor: '#172554',
-      confirmButtonText: '확인',
-    });
+    CustomAlert('카카오 인증 완료 후 접근해주세요.', 'error');
   }
 }
