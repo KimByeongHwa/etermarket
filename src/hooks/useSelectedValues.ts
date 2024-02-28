@@ -14,8 +14,8 @@ export const useSelectedValues = () => {
     gradeSelected: null,
   });
 
-  const handleSelectedValues = (name: string) => (value: string) => {
-    if (name === 'firstSelected') {
+  const handleSelectedValues = (key: keyof SelectedValues) => (value: string) => {
+    if (key === 'firstSelected') {
       setSelectedValues({
         firstSelected: value,
         distanceSelected: null,
@@ -29,7 +29,7 @@ export const useSelectedValues = () => {
         wingSelected: null,
       });
     } else {
-      setSelectedValues(prev => ({ ...prev, [name]: value }));
+      setSelectedValues(prev => ({ ...prev, [key]: value }));
     }
   };
 

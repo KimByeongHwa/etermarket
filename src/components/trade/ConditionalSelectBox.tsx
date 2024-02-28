@@ -7,7 +7,7 @@ export default function ConditionalSelectBox({
   handleSelectedValues,
 }: {
   selectedValues: SelectedValues;
-  handleSelectedValues: (name: string) => (value: string) => void;
+  handleSelectedValues: (name: keyof SelectedValues) => (value: string) => void;
 }) {
   return (
     <>

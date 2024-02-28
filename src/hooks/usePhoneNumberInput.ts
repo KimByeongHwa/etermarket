@@ -7,7 +7,6 @@ export const usePhoneNumberInput = (initialValue = '') => {
   const onPhoneNumberChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     const onlyNums = value.replace(/[^0-9]/g, '');
-    setRawPhoneNumber(onlyNums);
 
     if (onlyNums.length <= 11) {
       setRawPhoneNumber(onlyNums);

@@ -1,23 +1,23 @@
 import { FetchedMutantArmorItem, FetchedWeaponItem } from './fetchedItem.type';
 
-export interface ItemUpgradeData {
-  tuning: string;
-  enhancement: string;
+export interface UpgradeData {
+  tuning: string | null;
+  enhancement: string | null;
 }
 
 export interface ForSaleItemData {
   item: FetchedWeaponItem | FetchedMutantArmorItem;
-  upgrade: ItemUpgradeData;
+  upgrade: UpgradeData;
 }
 
 export interface CreateTradePostData {
   post_type: 'sell' | 'buy';
   forSaleItem: ForSaleItemData | null;
-  title: string;
-  content: string;
-  price: string;
-  phone_number: string;
-  character_nickname: string;
+  title: string | null;
+  content: string | null;
+  price: string | null;
+  phone_number: string | null;
+  character_nickname: string | null;
 }
 
 export interface WriterData {

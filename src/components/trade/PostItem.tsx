@@ -1,6 +1,7 @@
 import { FormEvent } from 'react';
 import { usePriceInput } from '@/hooks/usePriceInput';
 import { usePhoneNumberInput } from '@/hooks/usePhoneNumberInput';
+import { useCreateTradePost } from '@/hooks/useCreateTradePost';
 import CategoryHandler from '@/components/trade/CategoryHandler';
 import SelectBox from '@/components/common/SelectBox';
 import { Button } from '@/components/ui/button';
@@ -19,12 +20,13 @@ export default function PostItem({
   selectedItem?: FetchedWeaponItem | FetchedMutantArmorItem | null;
   clearSelectedOptions: () => void;
 }) {
-  const priceInput = usePriceInput();
-  const phoneNumberInput = usePhoneNumberInput();
+  const { rawPrice, price, onPriceChange } = usePriceInput();
+  const { rawPhoneNumber, phoneNumber, onPhoneNumberChange } = usePhoneNumberInput();
+  const { createTradePostData, handleCreateTradePostData } = useCreateTradePost();
 
   const handlePostButton = (e: FormEvent) => {
     e.preventDefault();
-    console.log('hi');
+    console.log(createTradePostData);
   };
 
   return (
@@ -41,13 +43,41 @@ export default function PostItem({
               <div className='grid grid-cols-6 items-center'>
                 <span className='col-span-1'>개조</span>
                 <div className='col-span-5'>
-                  <SelectBox placeholder='개조 상태를 선택해주세요.' items={upgradeTypes.tuningType} />
+                  <SelectBox
+                    placeholder='개조 상태를 선택해주세요.'
+                    items={upgradeTypes.tuningType}
+                    onChange={value =>
+                      handleCreateTradePostData('forSaleItem', {
+                        item: selectedItem,
+                        upgrade: {
+                          tuning: value,
+                          enhancement: createTradePostData.forSaleItem?.upgrade?.enhancement ?? null,
+                        },
+                      })
+                    }
+                  />
                 </div>
               </div>
               <div className='grid grid-cols-6 items-center'>
                 <span className='col-span-1'>강화</span>
                 <div className='col-span-5'>
-                  <SelectBox placeholder='강화 수치를 선택해주세요.' items={upgradeTypes.enhancementType} />
+                  <SelectBox
+                    placeholder='강화 수치를 선택해주세요.'
+                    items={
+                      selectedValues.firstSelected === 'weapon'
+                        ? upgradeTypes.weaponEnhancementType
+                        : upgradeTypes.mutantArmorEnhancementType
+                    }
+                    onChange={value =>
+                      handleCreateTradePostData('forSaleItem', {
+                        item: selectedItem,
+                        upgrade: {
+                          tuning: createTradePostData.forSaleItem?.upgrade?.tuning ?? null,
+                          enhancement: value,
+                        },
+                      })
+                    }
+                  />
                 </div>
               </div>
             </div>
@@ -55,9 +85,19 @@ export default function PostItem({
         </div>
       )}
 
-      <Input type='text' name='title' placeholder='제목을 입력해주세요.' />
+      <Input
+        type='text'
+        name='title'
+        placeholder='제목을 입력해주세요.'
+        onChange={e => handleCreateTradePostData('title', e.target.value)}
+      />
 
-      <Textarea name='content' placeholder='내용을 입력해주세요.' className='h-36' />
+      <Textarea
+        name='content'
+        placeholder='내용을 입력해주세요.'
+        onChange={e => handleCreateTradePostData('content', e.target.value)}
+        className='h-36'
+      />
 
       <div className='w-full grid grid-cols-4 items-center'>
         <span className='mr-4 col-span-1'>가격</span>
@@ -65,8 +105,11 @@ export default function PostItem({
           type='text'
           name='price'
           placeholder='숫자를 입력해주세요.'
-          value={priceInput.price}
-          onChange={priceInput.onPriceChange}
+          value={price}
+          onChange={e => {
+            onPriceChange(e);
+            handleCreateTradePostData('price', rawPrice);
+          }}
           className='col-span-3'
         />
       </div>
@@ -77,6 +120,7 @@ export default function PostItem({
           type='text'
           name='characterNickname'
           placeholder='거래할 캐릭터명을 입력해주세요.'
+          onChange={e => handleCreateTradePostData('character_nickname', e.target.value)}
           className='col-span-3'
         />
       </div>
@@ -87,8 +131,11 @@ export default function PostItem({
           type='text'
           name='phoneNumber'
           placeholder='숫자를 입력해주세요.'
-          value={phoneNumberInput.phoneNumber}
-          onChange={phoneNumberInput.onPhoneNumberChange}
+          value={phoneNumber}
+          onChange={e => {
+            onPhoneNumberChange(e);
+            handleCreateTradePostData('phone_number', rawPhoneNumber);
+          }}
           className='col-span-3'
         />
       </div>
