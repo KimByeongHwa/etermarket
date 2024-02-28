@@ -1,5 +1,5 @@
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { SelectBoxProps } from '@/types/selectBoxProps.type';
+import { SelectBoxProps } from '@/types/trade/selectBoxProps.type';
 
 export default function SelectBox({ placeholder, items, onChange }: SelectBoxProps) {
   return (

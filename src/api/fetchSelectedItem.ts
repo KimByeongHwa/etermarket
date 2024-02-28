@@ -1,6 +1,6 @@
 import supabase from '@/lib/supabase';
 import CustomAlert from '@/components/common/CustomAlert';
-import { WeaponParameter, MutantArmorParameter } from '@/types/itemFetchParameter.type';
+import { WeaponParameter, MutantArmorParameter } from '@/types/trade/itemFetchParameter.type';
 
 export default async function fetchSelectedItem(
   firstSelected: 'weapon' | 'armor',

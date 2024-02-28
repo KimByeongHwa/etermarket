@@ -1,6 +1,6 @@
 import supabase from '@/lib/supabase';
 import CustomAlert from '@/components/common/CustomAlert';
-import { SignUpFormData } from '@/types/authData.type';
+import { SignUpFormData } from '@/types/auth/authData.type';
 
 export default async function handleSignUp(data: SignUpFormData) {
   try {

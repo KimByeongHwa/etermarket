@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import SelectedValues from '@/types/selectedValues.type';
+import SelectedValues from '@/types/trade/selectedValues.type';
 
 export const useSelectedValues = () => {
   const [selectedValues, setSelectedValues] = useState<SelectedValues>({
@@ -14,7 +14,7 @@ export const useSelectedValues = () => {
     gradeSelected: null,
   });
 
-  const getSelectedValuesObject = (name: string) => (value: string) => {
+  const handleSelectedValues = (name: string) => (value: string) => {
     if (name === 'firstSelected') {
       setSelectedValues({
         firstSelected: value,
@@ -33,5 +33,5 @@ export const useSelectedValues = () => {
     }
   };
 
-  return { selectedValues, setSelectedValues, getSelectedValuesObject };
+  return { selectedValues, setSelectedValues, handleSelectedValues };
 };
