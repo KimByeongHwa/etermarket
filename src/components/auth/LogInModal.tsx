@@ -45,7 +45,7 @@ export default function LogInModal({ trigger }: { trigger: string | ReactElement
           <DialogTitle className='text-center mt-2 text-xl'>로그인</DialogTitle>
         </DialogHeader>
 
-        <form onSubmit={e => e.preventDefault()} className='w-3/5 mx-auto'>
+        <form onSubmit={e => e.preventDefault()} className='w-4/5 mx-auto md:w-3/5'>
           <label htmlFor='userId' className='block text-start font-medium leading-6 text-gray-900'>
             아이디
           </label>
@@ -77,7 +77,7 @@ export default function LogInModal({ trigger }: { trigger: string | ReactElement
           </div>
         </form>
 
-        <div className='w-3/5 mt-4 mx-auto'>
+        <div className='w-4/5 mx-auto mt-4 md:w-3/5'>
           <DialogDescription>아직 회원이 아니신가요?</DialogDescription>
           <Button
             type='button'

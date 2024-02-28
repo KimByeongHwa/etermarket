@@ -21,7 +21,7 @@ export default function Home() {
   const logInUserData = localStorage.getItem('userData');
 
   return (
-    <div className=' mx-auto my-20 max-w-7xl px-6 lg:my-28 lg:px-8'>
+    <div className=' mx-auto my-16 max-w-7xl px-6 lg:my-28 lg:px-8'>
       <div className='mx-auto max-w-2xl text-center'>
         <p className='mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl'>ETERMARKET</p>
         <p className='mt-6 text-lg leading-8 text-gray-600'>이터널시티 아이템 거래 플랫폼</p>

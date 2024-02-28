@@ -1,12 +1,16 @@
 import { useEffect, useState } from 'react';
 import { useSelectedValues } from '@/hooks/useSelectedValues';
+import checkAuthentication from '@/api/checkAuthentication';
+import fetchSelectedItem from '@/api/fetchSelectedItem';
 import ConditionalSelectBox from '@/components/trade/ConditionalSelectBox';
 import { Button } from '@/components/ui/button';
 import ItemBox from '@/components/trade/ItemBox';
-import defaultImage from '@/assets/noImage.jpg';
 import CustomAlert from '@/components/common/CustomAlert';
 import PostItem from '@/components/trade/PostItem';
-import { FetchedWeaponItem, FetchedMutantArmorItem } from '@/types/fetchedItem.type.ts';
+import defaultImage from '@/assets/noImage.jpg';
+import SelectedValues from '@/types/trade/selectedValues.type';
+import { MutantArmorParameter } from '@/types/trade/itemFetchParameter.type';
+import { FetchedWeaponItem, FetchedMutantArmorItem } from '@/types/trade/fetchedItem.type';
 
 export default function SellItemPage() {
   const [fetchedItems, setFetchedItems] = useState<FetchedWeaponItem[] | FetchedMutantArmorItem[] | null>(null);
@@ -14,7 +18,98 @@ export default function SellItemPage() {
   const [selectedItem, setSelectedItem] = useState<FetchedWeaponItem | FetchedMutantArmorItem | null>(null);
   const [isPostStep, setIsPostStep] = useState(false);
 
-  const { selectedValues, setSelectedValues, getSelectedValuesObject } = useSelectedValues();
+  const { selectedValues, setSelectedValues, handleSelectedValues } = useSelectedValues();
+
+  const isValidParameter = (parameter: Partial<SelectedValues>) => {
+    if (Object.keys(parameter).length === 0) {
+      return false;
+    }
+
+    for (const key in parameter) {
+      const keyOfParameter = parameter[key as keyof SelectedValues];
+      if (keyOfParameter === null) {
+        return false;
+      }
+    }
+    return true;
+  };
+
+  const handleSelectButton = async () => {
+    const isAuthenticated = await checkAuthentication();
+
+    if (!isAuthenticated) {
+      CustomAlert('로그인 후 이용해주세요.', 'warning');
+      return;
+    }
+
+    if (selectedValues.firstSelected === '') {
+      CustomAlert('1차 분류를 선택해주세요.', 'warning');
+      return;
+    }
+
+    switch (selectedValues.firstSelected) {
+      case 'weapon': {
+        const parameter = {
+          distanceSelected: selectedValues.distanceSelected || null,
+          legalSelected: selectedValues.legalSelected || null,
+          clSelected: selectedValues.clSelected || null,
+          gradeSelected: selectedValues.gradeSelected || null,
+          weaponSelected: selectedValues.shortWeaponSelected || selectedValues.longWeaponSelected || null,
+        };
+
+        if (!isValidParameter(parameter)) {
+          CustomAlert('모든 선택을 완료해주세요', 'warning');
+          return;
+        }
+
+        fetchSelectedItem(selectedValues.firstSelected, parameter).then(res => {
+          if (res?.data) setFetchedItems(res.data);
+        });
+
+        break;
+      }
+      case 'armor': {
+        let parameter: MutantArmorParameter;
+
+        if (selectedValues.raceSelected === null) {
+          CustomAlert('모든 선택을 완료해주세요', 'warning');
+          return;
+        }
+
+        if (selectedValues.raceSelected === 'human') {
+          GoToPostStep(selectedValues);
+          break;
+        } else if (selectedValues.raceSelected === 'mutant') {
+          parameter = {
+            genderSelected: selectedValues.genderSelected || null,
+            clSelected: selectedValues.clSelected || null,
+            gradeSelected: selectedValues.gradeSelected || null,
+          };
+
+          if (!isValidParameter(parameter)) {
+            CustomAlert('모든 선택을 완료해주세요', 'warning');
+            return;
+          }
+
+          fetchSelectedItem(selectedValues.firstSelected, parameter).then(res => {
+            if (res?.data) setFetchedItems(res.data);
+          });
+        }
+
+        break;
+      }
+      case 'accessories':
+      case 'belt':
+      case 'toy':
+      case 'tarot':
+      case 'costume':
+      case 'wing':
+      case 'etc': {
+        GoToPostStep(selectedValues);
+        break;
+      }
+    }
+  };
 
   const clearSelectedOptions = () => {
     setSelectedValues({
@@ -33,13 +128,19 @@ export default function SellItemPage() {
     setSelectedItem(null);
   };
 
-  const GoToPostWeaponOrMutantArmor = (selectedItem?: FetchedWeaponItem | FetchedMutantArmorItem | null) => {
-    if (!selectedItem) {
-      CustomAlert('판매할 아이템을 선택해주세요.', 'warning');
-      return;
+  const GoToPostStep = (
+    selectedValues: SelectedValues,
+    selectedItem?: FetchedWeaponItem | FetchedMutantArmorItem | null,
+  ) => {
+    if (
+      selectedValues.firstSelected === 'weapon' ||
+      (selectedValues.firstSelected === 'armor' && selectedValues.raceSelected === 'mutant')
+    ) {
+      if (!selectedItem) {
+        CustomAlert('판매할 아이템을 선택해주세요.', 'warning');
+        return;
+      }
     }
-
-    console.log(selectedItem);
 
     setIsPostStep(true);
     setIsWeponOrMutantArmor(false);
@@ -60,11 +161,10 @@ export default function SellItemPage() {
             어떤 아이템을 판매하시겠어요?
           </div>
           <div className='grid gap-4 mx-auto w-full sm:w-2/5 lg:w-1/4'>
-            <ConditionalSelectBox
-              selectedValues={selectedValues}
-              getSelectedValuesObject={getSelectedValuesObject}
-              setFetchedItems={setFetchedItems}
-            />
+            <ConditionalSelectBox selectedValues={selectedValues} handleSelectedValues={handleSelectedValues} />
+            <Button onClick={handleSelectButton} className='mt-10'>
+              확인
+            </Button>
           </div>
         </>
       )}
@@ -97,14 +197,20 @@ export default function SellItemPage() {
               뒤로 가기
             </Button>
             {fetchedItems && fetchedItems.length > 0 && (
-              <Button onClick={() => GoToPostWeaponOrMutantArmor(selectedItem)}>확인</Button>
+              <Button onClick={() => GoToPostStep(selectedValues, selectedItem)}>확인</Button>
             )}
           </div>
         </>
       )}
 
       {/* 아이템 등록 */}
-      {isPostStep && <PostItem firstSelected={selectedValues.firstSelected} selectedItem={selectedItem} />}
+      {isPostStep && (
+        <PostItem
+          selectedValues={selectedValues}
+          selectedItem={selectedItem}
+          clearSelectedOptions={clearSelectedOptions}
+        />
+      )}
     </div>
   );
 }

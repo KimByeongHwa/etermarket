@@ -36,7 +36,8 @@ export default function Header() {
         </div>
         <Popover.Group className='hidden lg:flex lg:gap-x-12 font-semibold leading-6 text-gray-900'>
           <Link to='/etermarket/search-item'>매물 검색</Link>
-          <Link to='/etermarket/sell-item'>매물 등록</Link>
+          <Link to='/etermarket/sell-item'>판매 등록</Link>
+          <Link to='/etermarket/buy-item'>구매 등록</Link>
           <Link to='/etermarket/trade-history'>시세 조회</Link>
         </Popover.Group>
         <div className='hidden lg:flex lg:flex-1 lg:justify-end lg:gap-x-12 font-semibold leading-6 text-gray-900'>
@@ -81,7 +82,14 @@ export default function Header() {
                   onClick={() => setMobileMenuOpen(false)}
                   className='-mx-3 block rounded-lg px-3 py-2   hover:bg-gray-50'
                 >
-                  매물 등록
+                  판매 등록
+                </Link>
+                <Link
+                  to='/etermarket/buy-item'
+                  onClick={() => setMobileMenuOpen(false)}
+                  className='-mx-3 block rounded-lg px-3 py-2   hover:bg-gray-50'
+                >
+                  구매 등록
                 </Link>
                 <Link
                   to='/etermarket/trade-history'
