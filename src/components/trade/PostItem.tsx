@@ -1,4 +1,4 @@
-import { FormEvent } from 'react';
+import { FormEvent, useEffect } from 'react';
 import { usePriceInput } from '@/hooks/usePriceInput';
 import { usePhoneNumberInput } from '@/hooks/usePhoneNumberInput';
 import { useCreateTradePost } from '@/hooks/useCreateTradePost';
@@ -28,6 +28,14 @@ export default function PostItem({
     e.preventDefault();
     console.log(createTradePostData);
   };
+
+  useEffect(() => {
+    handleCreateTradePostData('price', rawPrice);
+  }, [rawPrice, handleCreateTradePostData]);
+
+  useEffect(() => {
+    handleCreateTradePostData('phone_number', rawPhoneNumber);
+  }, [rawPhoneNumber, handleCreateTradePostData]);
 
   return (
     <form className='flex flex-col gap-6 mx-auto max-w-7xl md:w-3/5 lg:w-1/2'>

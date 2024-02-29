@@ -126,6 +126,7 @@ export default function SellItemPage() {
     setIsWeponOrMutantArmor(false);
     setFetchedItems(null);
     setSelectedItem(null);
+    setIsPostStep(false);
   };
 
   const GoToPostStep = (
