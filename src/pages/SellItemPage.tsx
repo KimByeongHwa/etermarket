@@ -63,7 +63,9 @@ export default function SellItemPage() {
         }
 
         fetchSelectedItem(selectedValues.firstSelected, parameter).then(res => {
-          if (res?.data) setFetchedItems(res.data);
+          if (res?.data) {
+            setFetchedItems(res.data);
+          }
         });
 
         break;
@@ -126,6 +128,7 @@ export default function SellItemPage() {
     setIsWeponOrMutantArmor(false);
     setFetchedItems(null);
     setSelectedItem(null);
+    setIsPostStep(false);
   };
 
   const GoToPostStep = (
@@ -178,7 +181,7 @@ export default function SellItemPage() {
               fetchedItems.map(item => {
                 return (
                   <ItemBox
-                    key={item.item_name}
+                    key={item.id}
                     itemName={item.item_name}
                     imgSrc={item.img_url || defaultImage}
                     onClick={() => {

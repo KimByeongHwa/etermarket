@@ -1,32 +1,32 @@
 import { FetchedMutantArmorItem, FetchedWeaponItem } from './fetchedItem.type';
 
-export interface ItemUpgradeData {
-  tuning: string;
-  enhancement: string;
+export interface UpgradeData {
+  tuning: string | null;
+  enhancement: string | null;
 }
 
-export interface ForSaleItemData {
+export interface TradeItemData {
   item: FetchedWeaponItem | FetchedMutantArmorItem;
-  upgrade: ItemUpgradeData;
+  upgrade: UpgradeData;
 }
 
-export interface CreateTradePostData {
-  post_type: 'sell' | 'buy';
-  forSaleItem: ForSaleItemData | null;
-  title: string;
-  content: string;
-  price: string;
-  phone_number: string;
-  character_nickname: string;
+export interface TradePostCreatingData {
+  postType: 'sell' | 'buy';
+  tradeItem: TradeItemData | null;
+  title: string | null;
+  content: string | null;
+  price: string | null;
+  characterNickname: string | null;
+  phoneNumber: string | null;
 }
 
 export interface WriterData {
-  kakao_email: string;
+  kakaoEmail: string;
+  userId: string;
   nickname: string;
-  user_id: string;
 }
 
-export interface ReadTradePostData extends CreateTradePostData {
+export interface TradePostReadingData extends TradePostCreatingData {
   writer: WriterData;
-  created_at: string;
+  createdAt: string;
 }
