@@ -9,7 +9,10 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import SelectedValues from '@/types/trade/selectedValues.type';
 import { FetchedMutantArmorItem, FetchedWeaponItem } from '@/types/trade/fetchedItem.type';
+import { TradePostCreatingData } from '@/types/trade/tradePostData.type';
 import upgradeTypes from '@/constants/ItemUpgradeTypes';
+import CustomAlert from '../common/CustomAlert';
+import createTradePost from '@/api/createTradePost';
 
 export default function PostItem({
   selectedValues,
@@ -22,20 +25,67 @@ export default function PostItem({
 }) {
   const { rawPrice, price, onPriceChange } = usePriceInput();
   const { rawPhoneNumber, phoneNumber, onPhoneNumberChange } = usePhoneNumberInput();
-  const { createTradePostData, handleCreateTradePostData } = useCreateTradePost();
+  const { tradePostCreatingData, handleTradePostCreatingData } = useCreateTradePost();
 
-  const handlePostButton = (e: FormEvent) => {
+  const isValidPostData = (data: TradePostCreatingData) => {
+    if (selectedValues.firstSelected === 'weapon' || selectedValues.raceSelected === 'mutant') {
+      if (
+        data.tradeItem === null ||
+        data.tradeItem?.upgrade.enhancement === null ||
+        data.tradeItem?.upgrade.tuning === null
+      ) {
+        return false;
+      }
+
+      for (const value of Object.values(data)) {
+        if (value === null || value.length === 0) {
+          return false;
+        }
+      }
+
+      return true;
+    }
+
+    // 아이템, 변이옷 이외
+    for (const [key, value] of Object.entries(data)) {
+      if (key !== 'tradeItem' && (value === null || value.length === 0)) {
+        return false;
+      }
+    }
+
+    return true;
+  };
+
+  const handlePostButton = async (e: FormEvent) => {
     e.preventDefault();
-    console.log(createTradePostData);
+    if (!isValidPostData(tradePostCreatingData)) {
+      CustomAlert('모든 항목을 입력해주세요.', 'warning');
+      return;
+    }
+
+    try {
+      await createTradePost(tradePostCreatingData);
+
+      const result = await CustomAlert('성공적으로 등록되었습니다.', 'success');
+      if (result.isConfirmed) {
+        window.location.href = '/etermarket/search-item';
+      }
+    } catch {
+      CustomAlert('등록에 실패했습니다.', 'error');
+    }
   };
 
   useEffect(() => {
-    handleCreateTradePostData('price', rawPrice);
-  }, [rawPrice, handleCreateTradePostData]);
+    handleTradePostCreatingData('price', rawPrice);
+  }, [rawPrice, handleTradePostCreatingData]);
 
   useEffect(() => {
-    handleCreateTradePostData('phone_number', rawPhoneNumber);
-  }, [rawPhoneNumber, handleCreateTradePostData]);
+    handleTradePostCreatingData('phoneNumber', rawPhoneNumber);
+  }, [rawPhoneNumber, handleTradePostCreatingData]);
+
+  useEffect(() => {
+    handleTradePostCreatingData('postType', 'sell');
+  }, [handleTradePostCreatingData]);
 
   return (
     <form className='flex flex-col gap-6 mx-auto max-w-7xl md:w-3/5 lg:w-1/2'>
@@ -55,11 +105,11 @@ export default function PostItem({
                     placeholder='개조 상태를 선택해주세요.'
                     items={upgradeTypes.tuningType}
                     onChange={value =>
-                      handleCreateTradePostData('forSaleItem', {
+                      handleTradePostCreatingData('tradeItem', {
                         item: selectedItem,
                         upgrade: {
                           tuning: value,
-                          enhancement: createTradePostData.forSaleItem?.upgrade?.enhancement ?? null,
+                          enhancement: tradePostCreatingData.tradeItem?.upgrade?.enhancement ?? null,
                         },
                       })
                     }
@@ -77,10 +127,10 @@ export default function PostItem({
                         : upgradeTypes.mutantArmorEnhancementType
                     }
                     onChange={value =>
-                      handleCreateTradePostData('forSaleItem', {
+                      handleTradePostCreatingData('tradeItem', {
                         item: selectedItem,
                         upgrade: {
-                          tuning: createTradePostData.forSaleItem?.upgrade?.tuning ?? null,
+                          tuning: tradePostCreatingData.tradeItem?.upgrade?.tuning ?? null,
                           enhancement: value,
                         },
                       })
@@ -97,13 +147,13 @@ export default function PostItem({
         type='text'
         name='title'
         placeholder='제목을 입력해주세요.'
-        onChange={e => handleCreateTradePostData('title', e.target.value)}
+        onChange={e => handleTradePostCreatingData('title', e.target.value)}
       />
 
       <Textarea
         name='content'
         placeholder='내용을 입력해주세요.'
-        onChange={e => handleCreateTradePostData('content', e.target.value)}
+        onChange={e => handleTradePostCreatingData('content', e.target.value)}
         className='h-36'
       />
 
@@ -112,11 +162,11 @@ export default function PostItem({
         <Input
           type='text'
           name='price'
-          placeholder='숫자를 입력해주세요.'
+          placeholder='단위 (원)'
           value={price}
           onChange={e => {
             onPriceChange(e);
-            handleCreateTradePostData('price', rawPrice);
+            handleTradePostCreatingData('price', rawPrice);
           }}
           className='col-span-3'
         />
@@ -128,7 +178,7 @@ export default function PostItem({
           type='text'
           name='characterNickname'
           placeholder='거래할 캐릭터명을 입력해주세요.'
-          onChange={e => handleCreateTradePostData('character_nickname', e.target.value)}
+          onChange={e => handleTradePostCreatingData('characterNickname', e.target.value)}
           className='col-span-3'
         />
       </div>
@@ -142,7 +192,7 @@ export default function PostItem({
           value={phoneNumber}
           onChange={e => {
             onPhoneNumberChange(e);
-            handleCreateTradePostData('phone_number', rawPhoneNumber);
+            handleTradePostCreatingData('phoneNumber', rawPhoneNumber);
           }}
           className='col-span-3'
         />
