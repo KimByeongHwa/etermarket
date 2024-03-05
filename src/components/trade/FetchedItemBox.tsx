@@ -1,4 +1,4 @@
-export default function ItemBox({
+export default function FetchedItemBox({
   itemName,
   imgSrc,
   onClick,
