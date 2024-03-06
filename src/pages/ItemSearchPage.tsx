@@ -13,7 +13,7 @@ export default function ItemSearchPage() {
 
   const targetRef = useRef<HTMLDivElement | null>(null);
 
-  const getItemList = useCallback(async (pageIndex: number, searchInput: string) => {
+  const getItemList = useCallback(async (pageIndex: number, searchInput?: string) => {
     const res = await fetchTradeItems(pageIndex, searchInput ? searchInput : null);
 
     if (res.data && pageIndex === 0) {
@@ -27,7 +27,6 @@ export default function ItemSearchPage() {
     if (res.data?.length === 0) {
       setIsEnd(true);
     }
-    console.log('pageIndex', pageIndex);
   }, []);
 
   const handleIntersection = useCallback(
@@ -43,7 +42,6 @@ export default function ItemSearchPage() {
 
   const handleSearch = () => {
     setResultData([]);
-    setPageIndex(0);
     getItemList(0, searchInput);
   };
 
@@ -62,7 +60,8 @@ export default function ItemSearchPage() {
   }, [targetRef, pageIndex, handleIntersection]);
 
   useEffect(() => {
-    getItemList(pageIndex, searchInput);
+    getItemList(0);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -87,9 +86,9 @@ export default function ItemSearchPage() {
       <div className='flex flex-col gap-4'>
         {resultData.length ? (
           resultData.map((data, idx) => {
-            if (idx === resultData.length - 1) return <ItemListBox ref={targetRef} key={data.id} listData={data} />;
+            if (idx === resultData.length - 1) return <ItemListBox ref={targetRef} key={data.id} postData={data} />;
 
-            return <ItemListBox key={data.id} listData={data} />;
+            return <ItemListBox key={data.id} postData={data} />;
           })
         ) : (
           <div>검색된 결과가 없습니다.</div>
