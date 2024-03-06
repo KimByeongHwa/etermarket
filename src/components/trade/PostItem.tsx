@@ -11,7 +11,7 @@ import { Textarea } from '@/components/ui/textarea';
 import SelectedValues from '@/types/trade/selectedValues.type';
 import { FetchedMutantArmorItem, FetchedWeaponItem } from '@/types/trade/fetchedItem.type';
 import { TradePostCreatingData } from '@/types/trade/tradePostData.type';
-import upgradeTypes from '@/constants/ItemUpgradeTypes';
+import upgradeTypes from '@/constants/itemUpgradeTypes';
 import CustomAlert from '../common/CustomAlert';
 import createTradePost from '@/api/createTradePost';
 
@@ -83,7 +83,7 @@ export default function PostItem({
 
   useEffect(() => {
     handleTradePostCreatingData('post_type', postType);
-  }, [location, handleTradePostCreatingData]);
+  }, [location, postType, handleTradePostCreatingData]);
 
   useEffect(() => {
     handleTradePostCreatingData('price', rawPrice);

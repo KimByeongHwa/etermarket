@@ -1,5 +1,5 @@
 import SelectBox from '@/components/common/SelectBox';
-import categories from '@/constants/ItemCategoryTypes';
+import categories from '@/constants/itemCategoryTypes';
 import SelectedValues from '@/types/trade/selectedValues.type';
 
 export default function ConditionalSelectBox({
