@@ -1,12 +1,12 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import Layout from './Layout';
-import Home from './pages/Home';
-import SearchItemPage from './pages/SearchItemPage';
-import SellItemPage from './pages/SellItemPage';
-import BuyItemPage from './pages/BuyItemPage';
-import TradeHistoryPage from './pages/TradeHistoryPage';
-import SingUpPage from './pages/SignUpPage';
-import MyPage from './pages/MyPage';
+import Layout from '@/Layout';
+import Home from '@/pages/Home';
+import ItemSearchPage from '@/pages/ItemSearchPage';
+import SellRegistrationPage from '@/pages/SellRegistrationPage';
+import BuyRegistrationPage from '@/pages/BuyRegistrationPage';
+import TradeHistoryPage from '@/pages/TradeHistoryPage';
+import SingUpPage from '@/pages/SignUpPage';
+import MyPage from '@/pages/MyPage';
 import '@/global.css';
 
 const router = createBrowserRouter([
@@ -17,15 +17,15 @@ const router = createBrowserRouter([
       { path: '', element: <Home /> },
       {
         path: 'search-item',
-        element: <SearchItemPage />,
+        element: <ItemSearchPage />,
       },
       {
         path: 'sell-item',
-        element: <SellItemPage />,
+        element: <SellRegistrationPage />,
       },
       {
         path: 'buy-item',
-        element: <BuyItemPage />,
+        element: <BuyRegistrationPage />,
       },
       {
         path: 'trade-history',

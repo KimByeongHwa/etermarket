@@ -3,13 +3,14 @@ import { TradePostCreatingData, TradeItemData } from '@/types/trade/tradePostDat
 
 export const useCreateTradePost = () => {
   const [tradePostCreatingData, setTradePostCreatingData] = useState<TradePostCreatingData>({
-    postType: 'sell' || 'buy',
-    tradeItem: null,
+    post_type: 'sell' || 'buy',
+    item_catecory: null,
+    trade_item: null,
     title: null,
     content: null,
     price: null,
-    phoneNumber: null,
-    characterNickname: null,
+    phone_number: null,
+    character_nickname: null,
   });
 
   const handleTradePostCreatingData = useCallback((key: keyof TradePostCreatingData, value: string | TradeItemData) => {

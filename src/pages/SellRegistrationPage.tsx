@@ -4,7 +4,7 @@ import checkAuthentication from '@/api/checkAuthentication';
 import fetchSelectedItem from '@/api/fetchSelectedItem';
 import ConditionalSelectBox from '@/components/trade/ConditionalSelectBox';
 import { Button } from '@/components/ui/button';
-import ItemBox from '@/components/trade/ItemBox';
+import FetchedItemBox from '@/components/trade/FetchedItemBox';
 import CustomAlert from '@/components/common/CustomAlert';
 import PostItem from '@/components/trade/PostItem';
 import defaultImage from '@/assets/noImage.jpg';
@@ -12,7 +12,7 @@ import SelectedValues from '@/types/trade/selectedValues.type';
 import { MutantArmorParameter } from '@/types/trade/itemFetchParameter.type';
 import { FetchedWeaponItem, FetchedMutantArmorItem } from '@/types/trade/fetchedItem.type';
 
-export default function SellItemPage() {
+export default function SellRegistrationPage() {
   const [fetchedItems, setFetchedItems] = useState<FetchedWeaponItem[] | FetchedMutantArmorItem[] | null>(null);
   const [isWeaponOrMutantArmor, setIsWeponOrMutantArmor] = useState(false);
   const [selectedItem, setSelectedItem] = useState<FetchedWeaponItem | FetchedMutantArmorItem | null>(null);
@@ -156,7 +156,7 @@ export default function SellItemPage() {
   }, [fetchedItems]);
 
   return (
-    <div className='mx-auto my-16 max-w-7xl px-6 lg:px-8'>
+    <div className='mx-auto my-16 max-w-7xl px-6'>
       {/* 아이템 조건 선택 */}
       {!fetchedItems && !isPostStep && (
         <>
@@ -180,7 +180,7 @@ export default function SellItemPage() {
             {fetchedItems && fetchedItems.length > 0 ? (
               fetchedItems.map(item => {
                 return (
-                  <ItemBox
+                  <FetchedItemBox
                     key={item.id}
                     itemName={item.item_name}
                     imgSrc={item.img_url || defaultImage}

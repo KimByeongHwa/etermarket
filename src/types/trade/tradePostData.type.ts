@@ -11,22 +11,24 @@ export interface TradeItemData {
 }
 
 export interface TradePostCreatingData {
-  postType: 'sell' | 'buy';
-  tradeItem: TradeItemData | null;
+  post_type: 'sell' | 'buy';
+  item_catecory: 'weapon' | 'armor' | 'accessories' | 'belt' | 'toy' | 'tarot' | 'costume' | 'wing' | 'etc' | null;
+  trade_item: TradeItemData | null;
   title: string | null;
   content: string | null;
   price: string | null;
-  characterNickname: string | null;
-  phoneNumber: string | null;
+  character_nickname: string | null;
+  phone_number: string | null;
 }
 
 export interface WriterData {
-  kakaoEmail: string;
-  userId: string;
+  kakao_email: string;
+  user_id: string;
   nickname: string;
 }
 
 export interface TradePostReadingData extends TradePostCreatingData {
+  id: number;
+  created_at: string;
   writer: WriterData;
-  createdAt: string;
 }

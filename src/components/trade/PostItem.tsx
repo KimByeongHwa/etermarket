@@ -1,4 +1,5 @@
 import { FormEvent, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { usePriceInput } from '@/hooks/usePriceInput';
 import { usePhoneNumberInput } from '@/hooks/usePhoneNumberInput';
 import { useCreateTradePost } from '@/hooks/useCreateTradePost';
@@ -10,7 +11,7 @@ import { Textarea } from '@/components/ui/textarea';
 import SelectedValues from '@/types/trade/selectedValues.type';
 import { FetchedMutantArmorItem, FetchedWeaponItem } from '@/types/trade/fetchedItem.type';
 import { TradePostCreatingData } from '@/types/trade/tradePostData.type';
-import upgradeTypes from '@/constants/ItemUpgradeTypes';
+import upgradeTypes from '@/constants/itemUpgradeTypes';
 import CustomAlert from '../common/CustomAlert';
 import createTradePost from '@/api/createTradePost';
 
@@ -27,13 +28,13 @@ export default function PostItem({
   const { rawPhoneNumber, phoneNumber, onPhoneNumberChange } = usePhoneNumberInput();
   const { tradePostCreatingData, handleTradePostCreatingData } = useCreateTradePost();
 
+  const location = useLocation();
+
+  const postType = location.pathname.includes('sell-item') ? 'sell' : 'buy';
+
   const isValidPostData = (data: TradePostCreatingData) => {
     if (selectedValues.firstSelected === 'weapon' || selectedValues.raceSelected === 'mutant') {
-      if (
-        data.tradeItem === null ||
-        data.tradeItem?.upgrade.enhancement === null ||
-        data.tradeItem?.upgrade.tuning === null
-      ) {
+      if (!data.trade_item || !data.trade_item.upgrade.enhancement || !data.trade_item.upgrade.tuning) {
         return false;
       }
 
@@ -48,7 +49,7 @@ export default function PostItem({
 
     // 아이템, 변이옷 이외
     for (const [key, value] of Object.entries(data)) {
-      if (key !== 'tradeItem' && (value === null || value.length === 0)) {
+      if (key !== 'trade_item' && (value === null || value.length === 0)) {
         return false;
       }
     }
@@ -58,6 +59,7 @@ export default function PostItem({
 
   const handlePostButton = async (e: FormEvent) => {
     e.preventDefault();
+
     if (!isValidPostData(tradePostCreatingData)) {
       CustomAlert('모든 항목을 입력해주세요.', 'warning');
       return;
@@ -76,16 +78,11 @@ export default function PostItem({
   };
 
   useEffect(() => {
+    handleTradePostCreatingData('post_type', postType);
+    handleTradePostCreatingData('item_catecory', selectedValues.firstSelected);
     handleTradePostCreatingData('price', rawPrice);
-  }, [rawPrice, handleTradePostCreatingData]);
-
-  useEffect(() => {
-    handleTradePostCreatingData('phoneNumber', rawPhoneNumber);
-  }, [rawPhoneNumber, handleTradePostCreatingData]);
-
-  useEffect(() => {
-    handleTradePostCreatingData('postType', 'sell');
-  }, [handleTradePostCreatingData]);
+    handleTradePostCreatingData('phone_number', rawPhoneNumber);
+  }, [location, postType, selectedValues.firstSelected, rawPrice, rawPhoneNumber, handleTradePostCreatingData]);
 
   return (
     <form className='flex flex-col gap-6 mx-auto max-w-7xl md:w-3/5 lg:w-1/2'>
@@ -105,11 +102,11 @@ export default function PostItem({
                     placeholder='개조 상태를 선택해주세요.'
                     items={upgradeTypes.tuningType}
                     onChange={value =>
-                      handleTradePostCreatingData('tradeItem', {
+                      handleTradePostCreatingData('trade_item', {
                         item: selectedItem,
                         upgrade: {
                           tuning: value,
-                          enhancement: tradePostCreatingData.tradeItem?.upgrade?.enhancement ?? null,
+                          enhancement: tradePostCreatingData.trade_item?.upgrade?.enhancement ?? null,
                         },
                       })
                     }
@@ -127,10 +124,10 @@ export default function PostItem({
                         : upgradeTypes.mutantArmorEnhancementType
                     }
                     onChange={value =>
-                      handleTradePostCreatingData('tradeItem', {
+                      handleTradePostCreatingData('trade_item', {
                         item: selectedItem,
                         upgrade: {
-                          tuning: tradePostCreatingData.tradeItem?.upgrade?.tuning ?? null,
+                          tuning: tradePostCreatingData.trade_item?.upgrade?.tuning ?? null,
                           enhancement: value,
                         },
                       })
@@ -178,7 +175,7 @@ export default function PostItem({
           type='text'
           name='characterNickname'
           placeholder='거래할 캐릭터명을 입력해주세요.'
-          onChange={e => handleTradePostCreatingData('characterNickname', e.target.value)}
+          onChange={e => handleTradePostCreatingData('character_nickname', e.target.value)}
           className='col-span-3'
         />
       </div>
@@ -192,14 +189,14 @@ export default function PostItem({
           value={phoneNumber}
           onChange={e => {
             onPhoneNumberChange(e);
-            handleTradePostCreatingData('phoneNumber', rawPhoneNumber);
+            handleTradePostCreatingData('phone_number', rawPhoneNumber);
           }}
           className='col-span-3'
         />
       </div>
 
       <Button onClick={handlePostButton} className='mt-4'>
-        판매 등록
+        {postType === 'sell' ? '판매 등록' : '구매 등록'}
       </Button>
       <Button variant='outline' onClick={clearSelectedOptions}>
         취소
