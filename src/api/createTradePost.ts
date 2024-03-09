@@ -18,6 +18,7 @@ export default async function createTradePost(postData: TradePostCreatingData | 
     // if (postData.post_type === 'sell') {
     await supabase.from('trade_posts').insert({
       post_type: postData.post_type,
+      item_category: postData.item_catecory,
       trade_item: postData.trade_item,
       title: postData.title,
       content: postData.content,

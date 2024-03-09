@@ -12,6 +12,7 @@ export interface TradeItemData {
 
 export interface TradePostCreatingData {
   post_type: 'sell' | 'buy';
+  item_catecory: 'weapon' | 'armor' | 'accessories' | 'belt' | 'toy' | 'tarot' | 'costume' | 'wing' | 'etc' | null;
   trade_item: TradeItemData | null;
   title: string | null;
   content: string | null;

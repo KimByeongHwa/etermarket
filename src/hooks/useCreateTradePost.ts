@@ -4,6 +4,7 @@ import { TradePostCreatingData, TradeItemData } from '@/types/trade/tradePostDat
 export const useCreateTradePost = () => {
   const [tradePostCreatingData, setTradePostCreatingData] = useState<TradePostCreatingData>({
     post_type: 'sell' || 'buy',
+    item_catecory: null,
     trade_item: null,
     title: null,
     content: null,

@@ -34,11 +34,7 @@ export default function PostItem({
 
   const isValidPostData = (data: TradePostCreatingData) => {
     if (selectedValues.firstSelected === 'weapon' || selectedValues.raceSelected === 'mutant') {
-      if (
-        data.trade_item === null ||
-        data.trade_item?.upgrade.enhancement === null ||
-        data.trade_item?.upgrade.tuning === null
-      ) {
+      if (!data.trade_item || !data.trade_item.upgrade.enhancement || !data.trade_item.upgrade.tuning) {
         return false;
       }
 
@@ -83,15 +79,10 @@ export default function PostItem({
 
   useEffect(() => {
     handleTradePostCreatingData('post_type', postType);
-  }, [location, postType, handleTradePostCreatingData]);
-
-  useEffect(() => {
+    handleTradePostCreatingData('item_catecory', selectedValues.firstSelected);
     handleTradePostCreatingData('price', rawPrice);
-  }, [rawPrice, handleTradePostCreatingData]);
-
-  useEffect(() => {
     handleTradePostCreatingData('phone_number', rawPhoneNumber);
-  }, [rawPhoneNumber, handleTradePostCreatingData]);
+  }, [location, postType, selectedValues.firstSelected, rawPrice, rawPhoneNumber, handleTradePostCreatingData]);
 
   return (
     <form className='flex flex-col gap-6 mx-auto max-w-7xl md:w-3/5 lg:w-1/2'>
