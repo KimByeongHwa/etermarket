@@ -1,8 +1,8 @@
 import { ForwardedRef, forwardRef } from 'react';
 import { MdOutlineImageNotSupported } from 'react-icons/md';
+import TradeTypeChip from '@/components/trade/TradeTypeChip';
 import addCommaToPrice from '@/utils/addCommaToPrice';
 import { TradePostReadingData } from '@/types/trade/tradePostData.type';
-import TradeTypeChip from './TradeTypeChip';
 
 interface ItemListBoxProps {
   postData: TradePostReadingData;
