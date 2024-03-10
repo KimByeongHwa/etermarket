@@ -30,7 +30,7 @@ export default function PostItem({
 
   const location = useLocation();
 
-  const postType = location.pathname.includes('sell-item') ? 'sell' : 'buy';
+  const tradeType = location.pathname.includes('sell-item') ? 'sell' : 'buy';
 
   const isValidPostData = (data: TradePostCreatingData) => {
     if (selectedValues.firstSelected === 'weapon' || selectedValues.raceSelected === 'mutant') {
@@ -78,11 +78,11 @@ export default function PostItem({
   };
 
   useEffect(() => {
-    handleTradePostCreatingData('post_type', postType);
+    handleTradePostCreatingData('trade_type', tradeType);
     handleTradePostCreatingData('item_catecory', selectedValues.firstSelected);
     handleTradePostCreatingData('price', rawPrice);
     handleTradePostCreatingData('phone_number', rawPhoneNumber);
-  }, [location, postType, selectedValues.firstSelected, rawPrice, rawPhoneNumber, handleTradePostCreatingData]);
+  }, [location, tradeType, selectedValues.firstSelected, rawPrice, rawPhoneNumber, handleTradePostCreatingData]);
 
   return (
     <form className='flex flex-col gap-6 mx-auto max-w-7xl md:w-3/5 lg:w-1/2'>
@@ -196,7 +196,7 @@ export default function PostItem({
       </div>
 
       <Button onClick={handlePostButton} className='mt-4'>
-        {postType === 'sell' ? '판매 등록' : '구매 등록'}
+        {tradeType === 'sell' ? '판매 등록' : '구매 등록'}
       </Button>
       <Button variant='outline' onClick={clearSelectedOptions}>
         취소

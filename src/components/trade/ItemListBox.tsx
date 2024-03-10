@@ -16,7 +16,7 @@ export default forwardRef(function ItemListBox({ postData }: ItemListBoxProps, r
       className='cursor-pointer w-full mx-auto grid grid-cols-4 items-center border rounded-2xl p-4 gap-10 md:grid-cols-5 md:py-6'
     >
       <div>
-        <TradeTypeChip type={postData.post_type} />
+        <TradeTypeChip type={postData.trade_type} />
       </div>
       <div className='h-14 m-auto'>
         {postData.trade_item ? (

@@ -15,9 +15,8 @@ export default async function createTradePost(postData: TradePostCreatingData | 
   const writerData: WriterData = { kakao_email: kakao_email, user_id: user_id, nickname: nickname };
 
   try {
-    // if (postData.post_type === 'sell') {
     await supabase.from('trade_posts').insert({
-      post_type: postData.post_type,
+      trade_type: postData.trade_type,
       item_category: postData.item_catecory,
       trade_item: postData.trade_item,
       title: postData.title,
@@ -32,7 +31,6 @@ export default async function createTradePost(postData: TradePostCreatingData | 
       .from('users')
       .update({ trade_posts: [postData] })
       .eq('user_id', parsedUserData.user_id);
-    // }
   } catch {
     CustomAlert('등록에 실패했습니다.', 'error');
   }
