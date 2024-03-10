@@ -105,7 +105,12 @@ export default function ItemSearchPage() {
 
   return (
     <div className='mx-auto my-16 max-w-7xl px-6'>
-      <div className='mb-14 text-center text-xl font-semibold leading-8 text-gray-900'>매물 리스트</div>
+      <div
+        onClick={() => window.location.reload()}
+        className='mb-14 text-center text-xl font-semibold leading-8 text-gray-900 cursor-pointer'
+      >
+        매물 리스트
+      </div>
 
       <div className='relative flex w-full mx-auto sm:w-4/5 md:w-3/5 lg:w-1/2'>
         <Input
@@ -122,7 +127,7 @@ export default function ItemSearchPage() {
         <IoIosSearch size={20} onClick={handleSearch} className='absolute right-6 bottom-2.5 cursor-pointer' />
       </div>
 
-      <div className='grid grid-cols-3 gap-3.5 w-fit mx-auto mt-10 mb-3.5 md:gap-4 md:mt-14 md:mb-6'>
+      <div className='grid grid-cols-3 gap-3.5 w-fit mx-auto mt-12 mb-3.5 md:gap-4 md:mt-14 md:mb-6'>
         {searchTags.tradeTypeTag.map(category => {
           return (
             <SelectChip
@@ -136,7 +141,7 @@ export default function ItemSearchPage() {
         })}
       </div>
 
-      <div className='grid grid-cols-5 gap-3.5 w-fit mx-auto mb-3.5 md:grid-cols-10 md:gap-4 md:mb-6'>
+      <div className='grid grid-cols-5 gap-3.5 w-fit mx-auto mb-6 md:grid-cols-10 md:gap-4 md:mb-7'>
         {searchTags.itemCategoryTag.map(category => {
           return (
             <SelectChip
