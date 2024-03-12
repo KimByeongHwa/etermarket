@@ -7,6 +7,7 @@ import SelectChip from '@/components/common/SelectChip';
 import ItemListBox from '@/components/trade/ItemListBox';
 import { TradePostReadingData } from '@/types/trade/tradePostData.type';
 import searchTags from '@/constants/searchTags';
+import LoadingSpinner from '@/components/common/LoadingSpinner';
 
 export default function ItemSearchPage() {
   const [resultData, setResultData] = useState<TradePostReadingData[]>([]);
@@ -14,6 +15,7 @@ export default function ItemSearchPage() {
   const [isEnd, setIsEnd] = useState(false);
   const [searchInput, setSearchInput] = useState('');
   const [searchKeyword, setSearchKeyword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const { selectedTradeTypeTag, handleTradeTypeTag, selectedItemCategoryTag, handleItemCategoryTag } = useSelectTag();
 
@@ -21,27 +23,34 @@ export default function ItemSearchPage() {
 
   const getItemList = useCallback(
     async (pageIndex: number, searchInput?: string, tradeType?: string, itemCategory?: string) => {
-      const res = await fetchTradeItems(
-        pageIndex,
-        searchInput ? searchInput : null,
-        tradeType ? tradeType : null,
-        itemCategory ? itemCategory : null,
-      );
+      if (pageIndex === 0) setIsLoading(true);
+      try {
+        const res = await fetchTradeItems(
+          pageIndex,
+          searchInput ? searchInput : null,
+          tradeType ? tradeType : null,
+          itemCategory ? itemCategory : null,
+        );
 
-      if (!res.data) {
+        if (!res.data) {
+          throw new Error();
+        }
+
+        if (res.data && pageIndex === 0) {
+          setResultData(res.data);
+        } else {
+          setResultData(prev => [...prev, ...(res.data as TradePostReadingData[])]);
+        }
+
+        setPageIndex(prev => prev + 1);
+
+        if (res.data?.length === 0) {
+          setIsEnd(true);
+        }
+      } catch (error) {
         throw new Error();
-      }
-
-      if (res.data && pageIndex === 0) {
-        setResultData(res.data);
-      } else {
-        setResultData(prev => [...prev, ...(res.data as TradePostReadingData[])]);
-      }
-
-      setPageIndex(prev => prev + 1);
-
-      if (res.data?.length === 0) {
-        setIsEnd(true);
+      } finally {
+        setIsLoading(false);
       }
     },
     [],
@@ -65,7 +74,6 @@ export default function ItemSearchPage() {
     handleTradeTypeTag('all');
     handleItemCategoryTag('all');
     setSearchKeyword(searchInput);
-    getItemList(0, searchInput);
   };
 
   const onClickTradeTypeTag = (value: string) => {
@@ -73,7 +81,6 @@ export default function ItemSearchPage() {
     setResultData([]);
     setIsEnd(false);
     handleTradeTypeTag(value);
-    getItemList(0, searchKeyword, value, selectedItemCategoryTag);
   };
 
   const onClickItemCategoryTag = (value: string) => {
@@ -81,7 +88,6 @@ export default function ItemSearchPage() {
     setResultData([]);
     setIsEnd(false);
     handleItemCategoryTag(value);
-    getItemList(0, searchKeyword, selectedTradeTypeTag, value);
   };
 
   useEffect(() => {
@@ -99,9 +105,8 @@ export default function ItemSearchPage() {
   }, [targetRef, pageIndex, handleIntersection]);
 
   useEffect(() => {
-    getItemList(0);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    getItemList(0, searchKeyword, selectedTradeTypeTag, selectedItemCategoryTag);
+  }, [getItemList, searchKeyword, selectedTradeTypeTag, selectedItemCategoryTag]);
 
   return (
     <div className='mx-auto my-16 max-w-7xl px-6'>
@@ -156,14 +161,16 @@ export default function ItemSearchPage() {
       </div>
 
       <div className='flex flex-col gap-4'>
-        {resultData.length ? (
+        <div className='mx-auto mt-10'>{isLoading && <LoadingSpinner />}</div>
+
+        {!isLoading && resultData.length === 0 ? (
+          <div>검색된 결과가 없습니다.</div>
+        ) : (
           resultData.map((data, idx) => {
             if (idx === resultData.length - 1) return <ItemListBox ref={targetRef} key={data.id} postData={data} />;
 
             return <ItemListBox key={data.id} postData={data} />;
           })
-        ) : (
-          <div>검색된 결과가 없습니다.</div>
         )}
       </div>
     </div>
