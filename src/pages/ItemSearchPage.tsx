@@ -127,7 +127,7 @@ export default function ItemSearchPage() {
     <div className='mx-auto my-16 max-w-7xl px-6'>
       <div
         onClick={() => window.location.reload()}
-        className='mb-14 text-center text-xl font-semibold leading-8 text-gray-900 cursor-pointer'
+        className='w-fit mx-auto mb-14 text-center text-xl font-semibold leading-8 text-gray-900 cursor-pointer'
       >
         매물 리스트
       </div>
