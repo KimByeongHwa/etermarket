@@ -1,18 +1,24 @@
 import { ForwardedRef, forwardRef } from 'react';
-import { MdOutlineImageNotSupported } from 'react-icons/md';
+import { BsBoxSeam } from 'react-icons/bs';
 import TradeTypeChip from '@/components/trade/TradeTypeChip';
-import addCommaToPrice from '@/utils/addCommaToPrice';
 import { TradePostReadingData } from '@/types/trade/tradePostData.type';
+import addCommaToPrice from '@/utils/addCommaToPrice';
 
 interface ItemListBoxProps {
   postData: TradePostReadingData;
+  onClick: () => void;
 }
 
-export default forwardRef(function ItemListBox({ postData }: ItemListBoxProps, ref: ForwardedRef<HTMLDivElement>) {
+export default forwardRef(function ItemListBox(
+  { postData, onClick }: ItemListBoxProps,
+  ref: ForwardedRef<HTMLDivElement>,
+) {
   const itemImgSrc = postData.trade_item?.item.img_url;
+
   return (
     <div
       ref={ref}
+      onClick={onClick}
       className='cursor-pointer w-full mx-auto grid grid-cols-4 items-center border rounded-2xl p-4 gap-10 md:grid-cols-5 md:py-6'
     >
       <div>
@@ -23,7 +29,7 @@ export default forwardRef(function ItemListBox({ postData }: ItemListBoxProps, r
           <img src={itemImgSrc} alt='item-img' className='w-full h-full object-contain' />
         ) : (
           <div className='flex justify-center items-center h-full'>
-            <MdOutlineImageNotSupported size={24} />
+            <BsBoxSeam size={24} />
           </div>
         )}
       </div>

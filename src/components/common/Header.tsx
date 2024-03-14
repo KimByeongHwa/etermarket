@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import checkAuthentication from '@/api/checkAuthentication';
 import { Dialog, Popover } from '@headlessui/react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import AuthHandler from '@/components/auth/AuthHandler ';
 import CustomAlert from '@/components/common/CustomAlert';
-import checkAuthentication from '@/api/checkAuthentication';
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);

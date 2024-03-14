@@ -7,10 +7,10 @@ import { Button } from '@/components/ui/button';
 import FetchedItemBox from '@/components/trade/FetchedItemBox';
 import CustomAlert from '@/components/common/CustomAlert';
 import PostItem from '@/components/trade/PostItem';
-import defaultImage from '@/assets/noImage.jpg';
 import SelectedValues from '@/types/trade/selectedValues.type';
 import { MutantArmorParameter } from '@/types/trade/itemFetchParameter.type';
 import { FetchedWeaponItem, FetchedMutantArmorItem } from '@/types/trade/fetchedItem.type';
+import defaultImage from '@/assets/noImage.jpg';
 
 export default function BuyRegistrationPage() {
   const [fetchedItems, setFetchedItems] = useState<FetchedWeaponItem[] | FetchedMutantArmorItem[] | null>(null);
