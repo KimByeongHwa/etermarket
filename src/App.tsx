@@ -7,6 +7,8 @@ import BuyRegistrationPage from '@/pages/BuyRegistrationPage';
 import TradeHistoryPage from '@/pages/TradeHistoryPage';
 import SingUpPage from '@/pages/SignUpPage';
 import MyPage from '@/pages/MyPage';
+import TradePostDetailsPage from '@/pages/TradePostDetailsPage';
+import PrivateRoute from './utils/PrivateRoute';
 import '@/global.css';
 
 const router = createBrowserRouter([
@@ -28,16 +30,30 @@ const router = createBrowserRouter([
         element: <BuyRegistrationPage />,
       },
       {
-        path: 'trade-history',
-        element: <TradeHistoryPage />,
+        element: <PrivateRoute isRequiredAuthentication={true} />,
+        children: [
+          {
+            path: 'mypage',
+            element: <MyPage />,
+          },
+          {
+            path: 'trade-post/:id',
+            element: <TradePostDetailsPage />,
+          },
+          {
+            path: 'trade-history',
+            element: <TradeHistoryPage />,
+          },
+        ],
       },
       {
-        path: 'signup',
-        element: <SingUpPage />,
-      },
-      {
-        path: 'mypage',
-        element: <MyPage />,
+        element: <PrivateRoute isRequiredAuthentication={false} />,
+        children: [
+          {
+            path: 'signup',
+            element: <SingUpPage />,
+          },
+        ],
       },
     ],
   },

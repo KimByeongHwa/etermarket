@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Dialog, Popover } from '@headlessui/react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
-import AuthHandler from '../auth/AuthHandler ';
+import AuthHandler from '@/components/auth/AuthHandler ';
+import CustomAlert from '@/components/common/CustomAlert';
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -38,7 +39,17 @@ export default function Header() {
           <Link to='/etermarket/search-item'>매물 검색</Link>
           <Link to='/etermarket/sell-item'>판매 등록</Link>
           <Link to='/etermarket/buy-item'>구매 등록</Link>
-          <Link to='/etermarket/trade-history'>시세 조회</Link>
+          <Link
+            to='/etermarket/trade-history'
+            onClick={e => {
+              if (!logInUserData) {
+                e.preventDefault();
+                CustomAlert('로그인 후 이용해주세요.', 'warning');
+              }
+            }}
+          >
+            시세 조회
+          </Link>
         </Popover.Group>
         <div className='hidden lg:flex lg:flex-1 lg:justify-end lg:gap-x-12 font-semibold leading-6 text-gray-900'>
           {nickname && (
@@ -93,7 +104,14 @@ export default function Header() {
                 </Link>
                 <Link
                   to='/etermarket/trade-history'
-                  onClick={() => setMobileMenuOpen(false)}
+                  onClick={e => {
+                    if (!logInUserData) {
+                      e.preventDefault();
+                      CustomAlert('로그인 후 이용해주세요.', 'warning');
+                    } else {
+                      setMobileMenuOpen(false);
+                    }
+                  }}
                   className='-mx-3 block rounded-lg px-3 py-2  hover:bg-gray-50'
                 >
                   시세 조회

@@ -1,6 +1,6 @@
 import { useForm } from 'react-hook-form';
-import { SignUpFormData } from '@/types/auth/authData.type';
 import handleSignUp from '@/api/handleSignUp';
+import { SignUpFormData } from '@/types/auth/authData.type';
 
 export default function SingUpPage() {
   const {
