@@ -1,18 +1,29 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Dialog, Popover } from '@headlessui/react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import AuthHandler from '@/components/auth/AuthHandler ';
 import CustomAlert from '@/components/common/CustomAlert';
+import checkAuthentication from '@/api/checkAuthentication';
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    const authenticate = async () => {
+      const authResult = await checkAuthentication();
+      setIsAuthenticated(authResult);
+    };
+
+    authenticate();
+  }, []);
 
   let nickname;
 
   const logInUserData = localStorage.getItem('userData');
 
-  if (logInUserData) {
+  if (isAuthenticated && logInUserData) {
     nickname = JSON.parse(logInUserData).nickname;
   }
 
@@ -42,7 +53,7 @@ export default function Header() {
           <Link
             to='/etermarket/trade-history'
             onClick={e => {
-              if (!logInUserData) {
+              if (!isAuthenticated) {
                 e.preventDefault();
                 CustomAlert('로그인 후 이용해주세요.', 'warning');
               }
@@ -105,7 +116,7 @@ export default function Header() {
                 <Link
                   to='/etermarket/trade-history'
                   onClick={e => {
-                    if (!logInUserData) {
+                    if (!isAuthenticated) {
                       e.preventDefault();
                       CustomAlert('로그인 후 이용해주세요.', 'warning');
                     } else {
