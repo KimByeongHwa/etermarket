@@ -1,4 +1,6 @@
 import { ReactElement, useState } from 'react';
+import handleLogIn from '@/api/handleLogIn';
+import signInWithKakao from '@/api/signInWithKakao';
 import {
   Dialog,
   DialogContent,
@@ -8,8 +10,6 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import handleLogIn from '@/api/handleLogIn';
-import signInWithKakao from '@/api/signInWithKakao';
 import KaKaoSymbol from '@/assets/svg/KaKaoSymbol';
 
 export default function LogInModal({ trigger }: { trigger: string | ReactElement }) {

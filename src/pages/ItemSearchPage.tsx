@@ -1,12 +1,16 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useSelectTag } from '@/hooks/useSelectTag';
 import fetchTradeItems from '@/api/fetchTradeItems';
 import { Input } from '@/components/ui/input';
-import { IoIosSearch } from 'react-icons/io';
 import SelectChip from '@/components/common/SelectChip';
 import ItemListBox from '@/components/trade/ItemListBox';
+import LoadingSpinner from '@/components/common/LoadingSpinner';
+import { IoIosSearch } from 'react-icons/io';
 import { TradePostReadingData } from '@/types/trade/tradePostData.type';
 import searchTags from '@/constants/searchTags';
+import checkAuthentication from '@/api/checkAuthentication';
+import CustomAlert from '@/components/common/CustomAlert';
 
 export default function ItemSearchPage() {
   const [resultData, setResultData] = useState<TradePostReadingData[]>([]);
@@ -14,34 +18,44 @@ export default function ItemSearchPage() {
   const [isEnd, setIsEnd] = useState(false);
   const [searchInput, setSearchInput] = useState('');
   const [searchKeyword, setSearchKeyword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const { selectedTradeTypeTag, handleTradeTypeTag, selectedItemCategoryTag, handleItemCategoryTag } = useSelectTag();
 
   const targetRef = useRef<HTMLDivElement | null>(null);
 
+  const navigate = useNavigate();
+
   const getItemList = useCallback(
     async (pageIndex: number, searchInput?: string, tradeType?: string, itemCategory?: string) => {
-      const res = await fetchTradeItems(
-        pageIndex,
-        searchInput ? searchInput : null,
-        tradeType ? tradeType : null,
-        itemCategory ? itemCategory : null,
-      );
+      if (pageIndex === 0) setIsLoading(true);
+      try {
+        const res = await fetchTradeItems(
+          pageIndex,
+          searchInput ? searchInput : null,
+          tradeType ? tradeType : null,
+          itemCategory ? itemCategory : null,
+        );
 
-      if (!res.data) {
+        if (!res.data) {
+          throw new Error();
+        }
+
+        if (res.data && pageIndex === 0) {
+          setResultData(res.data);
+        } else {
+          setResultData(prev => [...prev, ...(res.data as TradePostReadingData[])]);
+        }
+
+        setPageIndex(prev => prev + 1);
+
+        if (res.data?.length === 0) {
+          setIsEnd(true);
+        }
+      } catch {
         throw new Error();
-      }
-
-      if (res.data && pageIndex === 0) {
-        setResultData(res.data);
-      } else {
-        setResultData(prev => [...prev, ...(res.data as TradePostReadingData[])]);
-      }
-
-      setPageIndex(prev => prev + 1);
-
-      if (res.data?.length === 0) {
-        setIsEnd(true);
+      } finally {
+        setIsLoading(false);
       }
     },
     [],
@@ -65,7 +79,6 @@ export default function ItemSearchPage() {
     handleTradeTypeTag('all');
     handleItemCategoryTag('all');
     setSearchKeyword(searchInput);
-    getItemList(0, searchInput);
   };
 
   const onClickTradeTypeTag = (value: string) => {
@@ -73,7 +86,6 @@ export default function ItemSearchPage() {
     setResultData([]);
     setIsEnd(false);
     handleTradeTypeTag(value);
-    getItemList(0, searchKeyword, value, selectedItemCategoryTag);
   };
 
   const onClickItemCategoryTag = (value: string) => {
@@ -81,7 +93,16 @@ export default function ItemSearchPage() {
     setResultData([]);
     setIsEnd(false);
     handleItemCategoryTag(value);
-    getItemList(0, searchKeyword, selectedTradeTypeTag, value);
+  };
+
+  const onClickItemListBox = async (postId: number) => {
+    const isAuthenticated = await checkAuthentication();
+
+    if (!isAuthenticated) {
+      return CustomAlert('로그인 후 이용해주세요.', 'warning');
+    }
+
+    navigate(`/etermarket/trade-post/${postId}`);
   };
 
   useEffect(() => {
@@ -99,9 +120,8 @@ export default function ItemSearchPage() {
   }, [targetRef, pageIndex, handleIntersection]);
 
   useEffect(() => {
-    getItemList(0);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    getItemList(0, searchKeyword, selectedTradeTypeTag, selectedItemCategoryTag);
+  }, [getItemList, searchKeyword, selectedTradeTypeTag, selectedItemCategoryTag]);
 
   return (
     <div className='mx-auto my-16 max-w-7xl px-6'>
@@ -141,7 +161,7 @@ export default function ItemSearchPage() {
         })}
       </div>
 
-      <div className='grid grid-cols-5 gap-3.5 w-fit mx-auto mb-6 md:grid-cols-10 md:gap-4 md:mb-7'>
+      <div className='grid grid-cols-5 gap-3.5 w-fit mx-auto mb-6 md:grid-cols-10 md:gap-4 md:mb-8'>
         {searchTags.itemCategoryTag.map(category => {
           return (
             <SelectChip
@@ -156,14 +176,26 @@ export default function ItemSearchPage() {
       </div>
 
       <div className='flex flex-col gap-4'>
-        {resultData.length ? (
-          resultData.map((data, idx) => {
-            if (idx === resultData.length - 1) return <ItemListBox ref={targetRef} key={data.id} postData={data} />;
+        {isLoading && <div className='mx-auto mt-10'>{<LoadingSpinner />}</div>}
 
-            return <ItemListBox key={data.id} postData={data} />;
-          })
-        ) : (
+        {!isLoading && resultData.length === 0 ? (
           <div>검색된 결과가 없습니다.</div>
+        ) : (
+          resultData.map((data, idx) => {
+            if (idx === resultData.length - 1)
+              return (
+                <ItemListBox
+                  ref={targetRef}
+                  key={data.id}
+                  postData={data}
+                  onClick={() => {
+                    navigate(`/etermarket/trade-post/${data.id}`);
+                  }}
+                />
+              );
+
+            return <ItemListBox key={data.id} postData={data} onClick={() => onClickItemListBox(data.id)} />;
+          })
         )}
       </div>
     </div>

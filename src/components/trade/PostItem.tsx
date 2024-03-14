@@ -3,17 +3,17 @@ import { useLocation } from 'react-router-dom';
 import { usePriceInput } from '@/hooks/usePriceInput';
 import { usePhoneNumberInput } from '@/hooks/usePhoneNumberInput';
 import { useCreateTradePost } from '@/hooks/useCreateTradePost';
+import createTradePost from '@/api/createTradePost';
 import CategoryHandler from '@/components/trade/CategoryHandler';
 import SelectBox from '@/components/common/SelectBox';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import CustomAlert from '@/components/common/CustomAlert';
 import SelectedValues from '@/types/trade/selectedValues.type';
 import { FetchedMutantArmorItem, FetchedWeaponItem } from '@/types/trade/fetchedItem.type';
 import { TradePostCreatingData } from '@/types/trade/tradePostData.type';
 import upgradeTypes from '@/constants/itemUpgradeTypes';
-import CustomAlert from '../common/CustomAlert';
-import createTradePost from '@/api/createTradePost';
 
 export default function PostItem({
   selectedValues,
@@ -79,7 +79,7 @@ export default function PostItem({
 
   useEffect(() => {
     handleTradePostCreatingData('trade_type', tradeType);
-    handleTradePostCreatingData('item_catecory', selectedValues.firstSelected);
+    handleTradePostCreatingData('item_category', selectedValues.firstSelected);
     handleTradePostCreatingData('price', rawPrice);
     handleTradePostCreatingData('phone_number', rawPhoneNumber);
   }, [location, tradeType, selectedValues.firstSelected, rawPrice, rawPhoneNumber, handleTradePostCreatingData]);
@@ -89,51 +89,49 @@ export default function PostItem({
       <CategoryHandler selectedValues={selectedValues} selectedItemName={selectedItem?.item_name} />
 
       {selectedItem && (
-        <div className='flex flex-col gap-4'>
-          <div className='flex items-center gap-4 md:gap-10'>
-            <div className='w-fit border rounded-lg p-4'>
-              <img src={selectedItem.img_url} />
-            </div>
-            <div className='w-full grid gap-2'>
-              <div className='grid grid-cols-6 items-center'>
-                <span className='col-span-1'>개조</span>
-                <div className='col-span-5'>
-                  <SelectBox
-                    placeholder='개조 상태를 선택해주세요.'
-                    items={upgradeTypes.tuningType}
-                    onChange={value =>
-                      handleTradePostCreatingData('trade_item', {
-                        item: selectedItem,
-                        upgrade: {
-                          tuning: value,
-                          enhancement: tradePostCreatingData.trade_item?.upgrade?.enhancement ?? null,
-                        },
-                      })
-                    }
-                  />
-                </div>
+        <div className='flex items-center gap-4 md:gap-10'>
+          <div className='w-fit border rounded-lg p-4'>
+            <img src={selectedItem.img_url} alt='item_img' />
+          </div>
+          <div className='w-full grid gap-2'>
+            <div className='grid grid-cols-6 items-center'>
+              <span className='col-span-1'>개조</span>
+              <div className='col-span-5'>
+                <SelectBox
+                  placeholder='개조 상태를 선택해주세요.'
+                  items={upgradeTypes.tuningType}
+                  onChange={value =>
+                    handleTradePostCreatingData('trade_item', {
+                      item: selectedItem,
+                      upgrade: {
+                        tuning: value,
+                        enhancement: tradePostCreatingData.trade_item?.upgrade?.enhancement ?? null,
+                      },
+                    })
+                  }
+                />
               </div>
-              <div className='grid grid-cols-6 items-center'>
-                <span className='col-span-1'>강화</span>
-                <div className='col-span-5'>
-                  <SelectBox
-                    placeholder='강화 수치를 선택해주세요.'
-                    items={
-                      selectedValues.firstSelected === 'weapon'
-                        ? upgradeTypes.weaponEnhancementType
-                        : upgradeTypes.mutantArmorEnhancementType
-                    }
-                    onChange={value =>
-                      handleTradePostCreatingData('trade_item', {
-                        item: selectedItem,
-                        upgrade: {
-                          tuning: tradePostCreatingData.trade_item?.upgrade?.tuning ?? null,
-                          enhancement: value,
-                        },
-                      })
-                    }
-                  />
-                </div>
+            </div>
+            <div className='grid grid-cols-6 items-center'>
+              <span className='col-span-1'>강화</span>
+              <div className='col-span-5'>
+                <SelectBox
+                  placeholder='강화 수치를 선택해주세요.'
+                  items={
+                    selectedValues.firstSelected === 'weapon'
+                      ? upgradeTypes.weaponEnhancementType
+                      : upgradeTypes.mutantArmorEnhancementType
+                  }
+                  onChange={value =>
+                    handleTradePostCreatingData('trade_item', {
+                      item: selectedItem,
+                      upgrade: {
+                        tuning: tradePostCreatingData.trade_item?.upgrade?.tuning ?? null,
+                        enhancement: value,
+                      },
+                    })
+                  }
+                />
               </div>
             </div>
           </div>
