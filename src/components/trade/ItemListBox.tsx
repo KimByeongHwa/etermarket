@@ -19,7 +19,7 @@ export default forwardRef(function ItemListBox(
     <div
       ref={ref}
       onClick={onClick}
-      className='cursor-pointer w-full mx-auto grid grid-cols-4 items-center border rounded-2xl p-4 gap-10 md:grid-cols-5 md:py-6'
+      className='cursor-pointer w-full mx-auto grid grid-cols-4 items-center p-4 gap-10 md:grid-cols-5 md:py-6'
     >
       <div>
         <TradeTypeChip type={postData.trade_type} />

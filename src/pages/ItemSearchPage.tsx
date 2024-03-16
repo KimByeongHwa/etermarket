@@ -1,16 +1,16 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { IoIosSearch } from 'react-icons/io';
 import { useSelectTag } from '@/hooks/useSelectTag';
 import fetchTradeItems from '@/api/fetchTradeItems';
+import checkAuthentication from '@/api/checkAuthentication';
 import { Input } from '@/components/ui/input';
 import SelectChip from '@/components/common/SelectChip';
 import ItemListBox from '@/components/trade/ItemListBox';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
-import { IoIosSearch } from 'react-icons/io';
+import CustomAlert from '@/components/common/CustomAlert';
 import { TradePostReadingData } from '@/types/trade/tradePostData.type';
 import searchTags from '@/constants/searchTags';
-import checkAuthentication from '@/api/checkAuthentication';
-import CustomAlert from '@/components/common/CustomAlert';
 
 export default function ItemSearchPage() {
   const [resultData, setResultData] = useState<TradePostReadingData[]>([]);
@@ -19,7 +19,7 @@ export default function ItemSearchPage() {
   const [searchInput, setSearchInput] = useState('');
   const [searchKeyword, setSearchKeyword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [forceUpdtate, setForceUpdate] = useState(false);
+  const [hasChanged, setHasChanged] = useState(false);
 
   const { selectedTradeTypeTag, handleTradeTypeTag, selectedItemCategoryTag, handleItemCategoryTag } = useSelectTag();
 
@@ -80,7 +80,7 @@ export default function ItemSearchPage() {
     handleTradeTypeTag('all');
     handleItemCategoryTag('all');
     setSearchKeyword(searchInput);
-    setForceUpdate(prev => !prev);
+    setHasChanged(prev => !prev);
   };
 
   const onClickTradeTypeTag = (value: string) => {
@@ -88,7 +88,7 @@ export default function ItemSearchPage() {
     setResultData([]);
     setIsEnd(false);
     handleTradeTypeTag(value);
-    setForceUpdate(prev => !prev);
+    setHasChanged(prev => !prev);
   };
 
   const onClickItemCategoryTag = (value: string) => {
@@ -96,7 +96,7 @@ export default function ItemSearchPage() {
     setResultData([]);
     setIsEnd(false);
     handleItemCategoryTag(value);
-    setForceUpdate(prev => !prev);
+    setHasChanged(prev => !prev);
   };
 
   const onClickItemListBox = async (postId: number) => {
@@ -125,7 +125,7 @@ export default function ItemSearchPage() {
 
   useEffect(() => {
     getItemList(0, searchKeyword, selectedTradeTypeTag, selectedItemCategoryTag);
-  }, [getItemList, searchKeyword, selectedTradeTypeTag, selectedItemCategoryTag, forceUpdtate]);
+  }, [getItemList, searchKeyword, selectedTradeTypeTag, selectedItemCategoryTag, hasChanged]);
 
   return (
     <div className='mx-auto my-16 max-w-7xl px-6'>
@@ -179,8 +179,7 @@ export default function ItemSearchPage() {
         })}
       </div>
 
-      {/* <div className='flex flex-col gap-4'> */}
-      <div className='grid grid-cols-1 divide-y'>
+      <div className='grid grid-cols-1 divide-y border-red-100'>
         {isLoading && <div className='mx-auto mt-10'>{<LoadingSpinner />}</div>}
 
         {!isLoading && resultData.length === 0 ? (

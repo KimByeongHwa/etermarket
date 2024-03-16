@@ -1,20 +1,39 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import fetchTradePostDetails from '@/api/fetchTradePostDetails';
+import { Button } from '@/components/ui/button';
 import TradeTypeChip from '@/components/trade/TradeTypeChip';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
-import { TradePostReadingData } from '@/types/trade/tradePostData.type';
 import upgradeTypes from '@/constants/itemUpgradeTypes';
 import ContactModal from '@/components/trade/ContactModal';
+import { TradePostReadingData } from '@/types/trade/tradePostData.type';
 import addCommaToPrice from '@/utils/addCommaToPrice';
 import dateHandler from '@/utils/dateHandler';
+import isEqualObject from '@/utils/isEqualObject';
 
 export default function TradePostDetailsPage() {
   const [detailsData, setDetailsData] = useState<TradePostReadingData | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isMine, setIsMine] = useState(false);
 
   const params = useParams();
   const postId = Number(params.id);
+
+  const checkIsMine = (postWriter: { [key: string]: string }) => {
+    const loggedInUserData = localStorage.getItem('userData');
+
+    if (loggedInUserData) {
+      const parsedLoggedInUser = JSON.parse(loggedInUserData);
+
+      const loggedInUserAuthData = {
+        user_id: parsedLoggedInUser.user_id,
+        kakao_email: parsedLoggedInUser.kakao_email,
+        nickname: parsedLoggedInUser.nickname,
+      };
+
+      isEqualObject(loggedInUserAuthData, postWriter) && setIsMine(true);
+    }
+  };
 
   const getDetailsData = useCallback(async () => {
     setIsLoading(true);
@@ -24,6 +43,7 @@ export default function TradePostDetailsPage() {
 
       if (!result.error) {
         setDetailsData(result.data);
+        checkIsMine(result.data.writer);
       } else {
         throw new Error();
       }
@@ -64,7 +84,7 @@ export default function TradePostDetailsPage() {
 
   useEffect(() => {
     getDetailsData();
-  }, [getDetailsData]);
+  }, [getDetailsData, isMine]);
 
   return (
     <div className='flex flex-col gap-6 mx-auto max-w-7xl my-16 px-6 md:gap-8 md:w-3/5 lg:w-1/2'>
@@ -79,13 +99,19 @@ export default function TradePostDetailsPage() {
               <div>
                 <TradeTypeChip type={detailsData?.trade_type} />
               </div>
-              <div className='text-zinc-400'>{dateHandler(detailsData?.created_at)}</div>
+              {isMine && (
+                <Button size='sm' variant='outline'>
+                  삭제
+                </Button>
+              )}
             </div>
           )}
 
-          <div className='text-xl font-semibold break-words'>{detailsData?.title}</div>
-
-          <hr />
+          <div className='grid gap-2'>
+            <div className='text-xl font-semibold break-words'>{detailsData?.title}</div>
+            {detailsData && <div className='text-zinc-400'>{dateHandler(detailsData?.created_at)}</div>}
+            <hr />
+          </div>
 
           {detailsData && detailsData.trade_item && (
             <div className='flex items-center gap-6 md:gap-8'>
@@ -122,7 +148,8 @@ export default function TradePostDetailsPage() {
             </div>
           </div>
 
-          <ContactModal detailsData={detailsData} />
+          {!isMine && <ContactModal detailsData={detailsData} />}
+          {isMine && <Button className='w-full my-8'>거래 완료하기</Button>}
         </>
       )}
     </div>
