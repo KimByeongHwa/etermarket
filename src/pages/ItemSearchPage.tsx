@@ -19,6 +19,7 @@ export default function ItemSearchPage() {
   const [searchInput, setSearchInput] = useState('');
   const [searchKeyword, setSearchKeyword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [forceUpdtate, setForceUpdate] = useState(false);
 
   const { selectedTradeTypeTag, handleTradeTypeTag, selectedItemCategoryTag, handleItemCategoryTag } = useSelectTag();
 
@@ -79,6 +80,7 @@ export default function ItemSearchPage() {
     handleTradeTypeTag('all');
     handleItemCategoryTag('all');
     setSearchKeyword(searchInput);
+    setForceUpdate(prev => !prev);
   };
 
   const onClickTradeTypeTag = (value: string) => {
@@ -86,6 +88,7 @@ export default function ItemSearchPage() {
     setResultData([]);
     setIsEnd(false);
     handleTradeTypeTag(value);
+    setForceUpdate(prev => !prev);
   };
 
   const onClickItemCategoryTag = (value: string) => {
@@ -93,6 +96,7 @@ export default function ItemSearchPage() {
     setResultData([]);
     setIsEnd(false);
     handleItemCategoryTag(value);
+    setForceUpdate(prev => !prev);
   };
 
   const onClickItemListBox = async (postId: number) => {
@@ -121,7 +125,7 @@ export default function ItemSearchPage() {
 
   useEffect(() => {
     getItemList(0, searchKeyword, selectedTradeTypeTag, selectedItemCategoryTag);
-  }, [getItemList, searchKeyword, selectedTradeTypeTag, selectedItemCategoryTag]);
+  }, [getItemList, searchKeyword, selectedTradeTypeTag, selectedItemCategoryTag, forceUpdtate]);
 
   return (
     <div className='mx-auto my-16 max-w-7xl px-6'>
@@ -175,7 +179,8 @@ export default function ItemSearchPage() {
         })}
       </div>
 
-      <div className='flex flex-col gap-4'>
+      {/* <div className='flex flex-col gap-4'> */}
+      <div className='grid grid-cols-1 divide-y'>
         {isLoading && <div className='mx-auto mt-10'>{<LoadingSpinner />}</div>}
 
         {!isLoading && resultData.length === 0 ? (
