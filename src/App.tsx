@@ -22,16 +22,16 @@ const router = createBrowserRouter([
         element: <ItemSearchPage />,
       },
       {
-        path: 'sell-item',
-        element: <SellRegistrationPage />,
-      },
-      {
-        path: 'buy-item',
-        element: <BuyRegistrationPage />,
-      },
-      {
         element: <PrivateRoute isRequiredAuthentication={true} />,
         children: [
+          {
+            path: 'sell-item',
+            element: <SellRegistrationPage />,
+          },
+          {
+            path: 'buy-item',
+            element: <BuyRegistrationPage />,
+          },
           {
             path: 'mypage',
             element: <MyPage />,

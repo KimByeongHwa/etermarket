@@ -10,6 +10,21 @@ export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
+  let nickname;
+
+  const logInUserData = localStorage.getItem('userData');
+
+  if (isAuthenticated && logInUserData) {
+    nickname = JSON.parse(logInUserData).nickname;
+  }
+
+  const handleAuthCheck = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (!isAuthenticated) {
+      e.preventDefault();
+      CustomAlert('로그인 후 이용해주세요.', 'warning');
+    }
+  };
+
   useEffect(() => {
     const authenticate = async () => {
       const authResult = await checkAuthentication();
@@ -18,14 +33,6 @@ export default function Header() {
 
     authenticate();
   }, []);
-
-  let nickname;
-
-  const logInUserData = localStorage.getItem('userData');
-
-  if (isAuthenticated && logInUserData) {
-    nickname = JSON.parse(logInUserData).nickname;
-  }
 
   return (
     <header>
@@ -48,17 +55,13 @@ export default function Header() {
         </div>
         <Popover.Group className='hidden lg:flex lg:gap-x-12 font-semibold leading-6 text-gray-900'>
           <Link to='/etermarket/search-item'>매물 검색</Link>
-          <Link to='/etermarket/sell-item'>판매 등록</Link>
-          <Link to='/etermarket/buy-item'>구매 등록</Link>
-          <Link
-            to='/etermarket/trade-history'
-            onClick={e => {
-              if (!isAuthenticated) {
-                e.preventDefault();
-                CustomAlert('로그인 후 이용해주세요.', 'warning');
-              }
-            }}
-          >
+          <Link to='/etermarket/sell-item' onClick={handleAuthCheck}>
+            판매 등록
+          </Link>
+          <Link to='/etermarket/buy-item' onClick={handleAuthCheck}>
+            구매 등록
+          </Link>
+          <Link to='/etermarket/trade-history' onClick={handleAuthCheck}>
             시세 조회
           </Link>
         </Popover.Group>
@@ -101,14 +104,20 @@ export default function Header() {
                 </Link>
                 <Link
                   to='/etermarket/sell-item'
-                  onClick={() => setMobileMenuOpen(false)}
+                  onClick={e => {
+                    handleAuthCheck(e);
+                    setMobileMenuOpen(false);
+                  }}
                   className='-mx-3 block rounded-lg px-3 py-2   hover:bg-gray-50'
                 >
                   판매 등록
                 </Link>
                 <Link
                   to='/etermarket/buy-item'
-                  onClick={() => setMobileMenuOpen(false)}
+                  onClick={e => {
+                    handleAuthCheck(e);
+                    setMobileMenuOpen(false);
+                  }}
                   className='-mx-3 block rounded-lg px-3 py-2   hover:bg-gray-50'
                 >
                   구매 등록
@@ -116,12 +125,8 @@ export default function Header() {
                 <Link
                   to='/etermarket/trade-history'
                   onClick={e => {
-                    if (!isAuthenticated) {
-                      e.preventDefault();
-                      CustomAlert('로그인 후 이용해주세요.', 'warning');
-                    } else {
-                      setMobileMenuOpen(false);
-                    }
+                    handleAuthCheck(e);
+                    setMobileMenuOpen(false);
                   }}
                   className='-mx-3 block rounded-lg px-3 py-2  hover:bg-gray-50'
                 >
