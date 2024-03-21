@@ -26,6 +26,7 @@ export default function TradePostDetailsPage() {
       const parsedLoggedInUser = JSON.parse(loggedInUserData);
 
       const loggedInUserAuthData = {
+        id: parsedLoggedInUser.id,
         user_id: parsedLoggedInUser.user_id,
         kakao_email: parsedLoggedInUser.kakao_email,
         nickname: parsedLoggedInUser.nickname,

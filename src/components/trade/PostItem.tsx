@@ -1,4 +1,4 @@
-import { FormEvent, useEffect } from 'react';
+import { FormEvent, useEffect, useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 import { usePriceInput } from '@/hooks/usePriceInput';
 import { usePhoneNumberInput } from '@/hooks/usePhoneNumberInput';
@@ -31,6 +31,18 @@ export default function PostItem({
   const location = useLocation();
 
   const tradeType = location.pathname.includes('sell-item') ? 'sell' : 'buy';
+
+  const writer = useMemo(() => {
+    const userData = localStorage.getItem('userData');
+    const parsedUserData = userData ? JSON.parse(userData) : null;
+
+    return {
+      id: parsedUserData.id,
+      kakao_email: parsedUserData.kakao_email,
+      user_id: parsedUserData.user_id,
+      nickname: parsedUserData.nickname,
+    };
+  }, []);
 
   const isValidPostData = (data: TradePostCreatingData) => {
     if (selectedValues.firstSelected === 'weapon' || selectedValues.raceSelected === 'mutant') {
@@ -82,7 +94,16 @@ export default function PostItem({
     handleTradePostCreatingData('item_category', selectedValues.firstSelected);
     handleTradePostCreatingData('price', rawPrice);
     handleTradePostCreatingData('phone_number', rawPhoneNumber);
-  }, [location, tradeType, selectedValues.firstSelected, rawPrice, rawPhoneNumber, handleTradePostCreatingData]);
+    handleTradePostCreatingData('writer', writer);
+  }, [
+    location,
+    tradeType,
+    selectedValues.firstSelected,
+    rawPrice,
+    rawPhoneNumber,
+    writer,
+    handleTradePostCreatingData,
+  ]);
 
   return (
     <form className='flex flex-col gap-6 mx-auto max-w-7xl md:w-3/5 lg:w-1/2'>
