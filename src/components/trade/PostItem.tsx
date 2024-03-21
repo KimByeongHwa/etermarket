@@ -1,9 +1,10 @@
-import { FormEvent, useEffect } from 'react';
+import { FormEvent, useEffect, useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 import { usePriceInput } from '@/hooks/usePriceInput';
 import { usePhoneNumberInput } from '@/hooks/usePhoneNumberInput';
 import { useCreateTradePost } from '@/hooks/useCreateTradePost';
 import createTradePost from '@/api/createTradePost';
+import fetchMyTradePosts from '@/api/fetchMyTradePosts';
 import CategoryHandler from '@/components/trade/CategoryHandler';
 import SelectBox from '@/components/common/SelectBox';
 import { Button } from '@/components/ui/button';
@@ -32,6 +33,18 @@ export default function PostItem({
 
   const tradeType = location.pathname.includes('sell-item') ? 'sell' : 'buy';
 
+  const writer = useMemo(() => {
+    const userData = localStorage.getItem('userData');
+    const parsedUserData = userData ? JSON.parse(userData) : null;
+
+    return {
+      id: parsedUserData.id,
+      kakao_email: parsedUserData.kakao_email,
+      user_id: parsedUserData.user_id,
+      nickname: parsedUserData.nickname,
+    };
+  }, []);
+
   const isValidPostData = (data: TradePostCreatingData) => {
     if (selectedValues.firstSelected === 'weapon' || selectedValues.raceSelected === 'mutant') {
       if (!data.trade_item || !data.trade_item.upgrade.enhancement || !data.trade_item.upgrade.tuning) {
@@ -57,23 +70,46 @@ export default function PostItem({
     return true;
   };
 
+  const checkTradePostsCount = async () => {
+    const userData = localStorage.getItem('userData');
+    const { id } = userData ? JSON.parse(userData) : null;
+
+    const myTradePosts = await fetchMyTradePosts(id);
+
+    if (myTradePosts.data.length >= 10) {
+      return false;
+    }
+
+    return true;
+  };
+
   const handlePostButton = async (e: FormEvent) => {
     e.preventDefault();
 
     if (!isValidPostData(tradePostCreatingData)) {
-      CustomAlert('모든 항목을 입력해주세요.', 'warning');
-      return;
+      return CustomAlert('모든 항목을 입력해주세요.', 'warning');
+    }
+
+    if (!(await checkTradePostsCount())) {
+      return CustomAlert(
+        '거래 글은 10개까지 작성 가능합니다. <br /> 기존 거래 글을 삭제 후 다시 작성해주세요.',
+        'warning',
+      );
     }
 
     try {
-      await createTradePost(tradePostCreatingData);
+      const postRequest = await createTradePost(tradePostCreatingData);
+
+      if (postRequest?.error) {
+        return CustomAlert('등록에 실패했습니다.', 'error');
+      }
 
       const result = await CustomAlert('성공적으로 등록되었습니다.', 'success');
-      if (result.isConfirmed) {
+      if (result.isConfirmed || result.isDismissed) {
         window.location.href = '/etermarket/search-item';
       }
     } catch {
-      CustomAlert('등록에 실패했습니다.', 'error');
+      return CustomAlert('등록에 실패했습니다.', 'error');
     }
   };
 
@@ -82,7 +118,16 @@ export default function PostItem({
     handleTradePostCreatingData('item_category', selectedValues.firstSelected);
     handleTradePostCreatingData('price', rawPrice);
     handleTradePostCreatingData('phone_number', rawPhoneNumber);
-  }, [location, tradeType, selectedValues.firstSelected, rawPrice, rawPhoneNumber, handleTradePostCreatingData]);
+    handleTradePostCreatingData('writer', writer);
+  }, [
+    location,
+    tradeType,
+    selectedValues.firstSelected,
+    rawPrice,
+    rawPhoneNumber,
+    writer,
+    handleTradePostCreatingData,
+  ]);
 
   return (
     <form className='flex flex-col gap-6 mx-auto max-w-7xl md:w-3/5 lg:w-1/2'>

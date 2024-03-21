@@ -26,6 +26,7 @@ export default function TradePostDetailsPage() {
       const parsedLoggedInUser = JSON.parse(loggedInUserData);
 
       const loggedInUserAuthData = {
+        id: parsedLoggedInUser.id,
         user_id: parsedLoggedInUser.user_id,
         kakao_email: parsedLoggedInUser.kakao_email,
         nickname: parsedLoggedInUser.nickname,
@@ -107,8 +108,8 @@ export default function TradePostDetailsPage() {
             </div>
           )}
 
-          <div className='grid gap-2'>
-            <div className='text-xl font-semibold break-words'>{detailsData?.title}</div>
+          <div className='flex flex-col gap-2 break-words whitespace-pre-line'>
+            <div className='w-full font-semibold'>{detailsData?.title}</div>
             {detailsData && <div className='text-zinc-400'>{dateHandler(detailsData?.created_at)}</div>}
             <hr />
           </div>
@@ -133,14 +134,12 @@ export default function TradePostDetailsPage() {
             </div>
           )}
 
-          <div className='grid grid-cols-5 items-start gap-4 md:grid-cols-6 lg:grid-cols-7'>
+          <div className='grid grid-cols-5 items-start gap-4 break-words whitespace-pre-line md:grid-cols-6 lg:grid-cols-7'>
             <span className='col-span-1 whitespace-nowrap text-lg font-semibold'>내용</span>
-            <div className='col-span-4 break-words whitespace-pre-line mb-4 md:col-span-5 lg:col-span-6'>
-              {detailsData?.content}
-            </div>
+            <div className='col-span-4 mb-4 md:col-span-5 lg:col-span-6'>{detailsData?.content}</div>
           </div>
 
-          <div className='grid grid-cols-5 items-center gap-4 md:grid-cols-6 lg:grid-cols-7'>
+          <div className='grid grid-cols-5 items-center gap-4 break-words whitespace-pre-line md:grid-cols-6 lg:grid-cols-7'>
             <span className='col-span-1 whitespace-nowrap text-lg font-semibold'>가격</span>
             <div className='col-span-4 md:col-span-5 lg:col-span-6'>
               <span>{detailsData?.price && addCommaToPrice(detailsData.price)}</span>

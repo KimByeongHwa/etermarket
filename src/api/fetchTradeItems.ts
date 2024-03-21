@@ -6,7 +6,7 @@ export default async function fetchTradeItems(
   tradeType?: string | null,
   itemCategory?: string | null,
 ) {
-  const startIndex = pageIndex * 5;
+  const startIndex = pageIndex * 10;
 
   let query = supabase.from('trade_posts').select('*').order('created_at', { ascending: false });
 
@@ -22,7 +22,7 @@ export default async function fetchTradeItems(
     query = query.eq('item_category', itemCategory);
   }
 
-  query = query.range(startIndex, startIndex + 4);
+  query = query.range(startIndex, startIndex + 9);
 
   const { data, error } = await query;
 
