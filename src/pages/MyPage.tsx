@@ -49,12 +49,16 @@ export default function MyPage() {
 
   return (
     <div className='mx-auto my-16 max-w-7xl px-6'>
-      <div className='mb-12'>
+      <div className='mb-8'>
         <div>
           <span className='text-lg font-semibold'>{parsedUserData.nickname}</span> 님이 작성하신 거래 글
           <span className='ml-2 text-lg'>{`(${myTradePosts.length} / 10)`}</span>
         </div>
-        <span className='text-zinc-400'>도배 방지를 위해 거래 글은 총 10개까지 작성 가능합니다.</span>
+        <p className='mt-2 text-xs text-zinc-400 md:text-sm'>
+          도배 방지를 위해 거래 글은 총 10개까지 작성 가능합니다.
+          <br />
+          초과 시 기존 글을 삭제 후 작성해주세요.
+        </p>
       </div>
 
       <div className='grid grid-cols-1 divide-y border-red-100'>
