@@ -1,11 +1,13 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import fetchTradePostDetails from '@/api/fetchTradePostDetails';
+import deleteTradePost from '@/api/deleteTradePost';
 import { Button } from '@/components/ui/button';
 import TradeTypeChip from '@/components/trade/TradeTypeChip';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import upgradeTypes from '@/constants/itemUpgradeTypes';
 import ContactModal from '@/components/trade/ContactModal';
+import CustomAlert from '@/components/common/CustomAlert';
 import { TradePostReadingData } from '@/types/trade/tradePostData.type';
 import addCommaToPrice from '@/utils/addCommaToPrice';
 import dateHandler from '@/utils/dateHandler';
@@ -83,6 +85,24 @@ export default function TradePostDetailsPage() {
     return matchedEnhancement?.text;
   };
 
+  const handleDeleteButton = async (postId: number) => {
+    const confirm = await CustomAlert('정말로 삭제하시겠습니까?', 'question', true);
+
+    if (confirm.isConfirmed) {
+      const result = await deleteTradePost(postId);
+
+      if (result?.error) {
+        return CustomAlert('정상적으로 삭제되지 않았습니다.', 'error');
+      }
+
+      CustomAlert('정상적으로 삭제되었습니다.', 'success').then(res => {
+        if (res.isConfirmed || res.isDismissed) {
+          window.location.href = '/etermarket/search-item';
+        }
+      });
+    }
+  };
+
   useEffect(() => {
     getDetailsData();
   }, [getDetailsData, isMine]);
@@ -101,7 +121,7 @@ export default function TradePostDetailsPage() {
                 <TradeTypeChip type={detailsData?.trade_type} />
               </div>
               {isMine && (
-                <Button size='sm' variant='outline'>
+                <Button onClick={() => handleDeleteButton(detailsData.id)} size='sm' variant='outline'>
                   삭제
                 </Button>
               )}

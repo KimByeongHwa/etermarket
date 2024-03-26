@@ -35,7 +35,7 @@ export default async function handleSignUp(data: SignUpFormData) {
         CustomAlert(errorMessage, 'error');
       } else {
         CustomAlert('회원가입이 완료되었습니다.<br /> 새로 만든 아이디로 로그인 해주세요.', 'success').then(res => {
-          if (res.isConfirmed) window.location.href = '/';
+          if (res.isConfirmed || res.isDismissed) window.location.href = '/';
         });
       }
     }
